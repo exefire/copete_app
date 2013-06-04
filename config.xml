@@ -5,14 +5,14 @@
         versionCode="10"
         version   = "1.0.0">
 
-        <name>PhoneGap Geolocation API Example</name>
+        <name>Aloo Copete</name>
 
         <description>
-            The documentation example from the Cordova docs
+            Esta aplicación es para hacer pedidos de licores en Santiago de Chile.
         </description>
 
-        <author href="https://blog.digitalbackcountry.com" email="ryan@adobe.com">
-            Ryan Stewart
+        <author href="http://www.exefire.com" email="egallardo@exefire.com">
+            Exequiel Gallardo
         </author>
         
         <preference name="phonegap-version" value="2.7.0" />
