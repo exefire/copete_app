@@ -8,7 +8,7 @@
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" charset="utf-8">
-
+var url_master = 'http://www.aloocopete.cl/comandas/';	
 var watchID = null;
 // Wait for Cordova to load
 //
@@ -76,13 +76,38 @@ function alertDismissed() {
 		// do something
 }
 function mostrar(){
-	var msg = (document.getElementById('lat').value + ',' + document.getElementById('lon').value);
+	var lat = document.getElementById('lat').value;
+	var lon = document.getElementById('lon').value;
+	var location = ( '(' + lat + ',' + lon + ')');
+	/* $.getJSON(url_master + "poly_punto.php?buscar_sector="+location+'&cosas1', function(data){
+		var precio = data['precio1'];
+		var nombre = data['nombre'];
+	}); */
+	
+	$.ajax({
+		url: 'http://www.aloocopete.cl/comandas/poly_punto.php?buscar_sector=(-33.44844633394117,%20-70.62138319015503)&cosas2',
+		dataType: 'jsonp',
+		jsonp: 'jsoncallback',
+		timeout: 10000,
+		success: function(data, status){
+			//data loaded
+			alert('OK');
+		},
+		error: function(){
+			//error loading data
+			alert('error');
+		}
+	});
+
+	
+	/* var msg = 'Sector: ' + nombre;
+	alert(msg);
 	navigator.notification.alert(
 			msg,  // message
 			alertDismissed,         // callback
 			'Aloo Copete',            // title
 			'Listo!'                  // buttonName
-	);
+	); */
 }
 </script>
 <meta charset="UTF-8">
@@ -94,7 +119,7 @@ html, body {
 }
 #map-canvas, #map_canvas {
 	width: 100%;
-	height: 300px;
+	height: 200px;
 }
 [data-role=page] {
 	height: 100% !important;
@@ -111,7 +136,7 @@ html, body {
 </head>
 <body onLoad="getCurrentPosition()">
 <!-- Start of first page -->
-<div data-role="page" id="foo">
+<div data-role="page" id="inicio">
   <div data-role="header">
     <h1>Aloo Copete</h1>
   </div>
@@ -122,15 +147,57 @@ html, body {
     <div id="map-canvas"></div>
     <input type="hidden" name="lat" id="lat">
     <input type="hidden" name="lon" id="lon">
-    <div id="boton_inicar" style="display:none; padding:10px; text-align:center;"><a href="#" onClick="mostrar()">Iniciar Pedido</a></div>
+    <div id="boton_inicar" style="display:none; padding:10px; text-align:center;">
+    <input type="button" onClick="mostrar()" value="Iniciar Pedido">
+    </div>
+
   </div>
   <!-- /content -->
   
   <div data-role="footer">
-    <h4>Delivery - Carrete Seguro</h4>
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#inicio" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
   </div>
   <!-- /footer --> 
 </div>
 <!-- /page -->
+
+
+
+
+
+<!-- Start of second page -->
+<div data-role="page" id="bar">
+
+	<div data-role="header">
+    <h1>Aloo Copete</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>		
+		<p><a href="#foo">Back to foo</a></p>	    
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<!--<h4>Page Footer</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#inicio">One</a></li>
+			<li><a href="#bar" class="ui-btn-active">Two</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+
+
+
 </body>
 </html>
