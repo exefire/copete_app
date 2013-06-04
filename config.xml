@@ -37,7 +37,7 @@
         <icon src="icons/icon-android-72.png" width="72" height="72"/>
     
         <!-- if a single splash screen is specified it will be used for all platforms. Multiple splash screens are recommended for iOS -->
-        <gap:splash src="splashes/splash.png" />
+        <!--<gap:splash src="splashes/splash.png" />-->
 
         <!-- iOS requires specific dimensions for different devices; classic iPhone screens, Retina displays, and iPad screens -->
         <gap:splash src="splashes/splash.png"/>

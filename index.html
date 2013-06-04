@@ -1,57 +1,108 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Device Properties Example</title>
+<head>
+<title>Device Properties Example</title>
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript" charset="utf-8">
 
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-    <script type="text/javascript" charset="utf-8">
+var watchID = null;
+// Wait for Cordova to load
+//
+document.addEventListener("deviceready", onDeviceReady, false);
 
-    var watchID = null;
-    // Wait for Cordova to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
+// Cordova is ready
+//
+function onDeviceReady() {
+		navigator.alert('Cordova is ready');
+}
 
-    // Cordova is ready
-    //
-    function onDeviceReady() {
-        navigator.alert('Cordova is ready');
-    }
+function getCurrentPosition() {
+		navigator.geolocation.getCurrentPosition(onSuccess, onError);    
+}
+		
+function watchPosition() {
+		// Update every 3 seconds
+		var options = { frequency: 3000 };
+		watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);        
+}
+// onSuccess Geolocation
+//
+function onSuccess(position) {
+		var element = document.getElementById('geolocation');
+		element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+												'Longitude: '          + position.coords.longitude             + '<br />' +
+												'Altitude: '           + position.coords.altitude              + '<br />' +
+												'Accuracy: '           + position.coords.accuracy              + '<br />' +
+												'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+												'Heading: '            + position.coords.heading               + '<br />' +
+												'Speed: '              + position.coords.speed                 + '<br />' +
+												'Timestamp: '          + new Date(position.timestamp)          + '<br />';
+		initialize(position.coords.latitude,position.coords.longitude);
+}
 
-    function getCurrentPosition() {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);    
-    }
-        
-    function watchPosition() {
-        // Update every 3 seconds
-        var options = { frequency: 3000 };
-        watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);        
-    }
-    // onSuccess Geolocation
-    //
-    function onSuccess(position) {
-        var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-                            'Longitude: '          + position.coords.longitude             + '<br />' +
-                            'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            'Heading: '            + position.coords.heading               + '<br />' +
-                            'Speed: '              + position.coords.speed                 + '<br />' +
-                            'Timestamp: '          + new Date(position.timestamp)          + '<br />';
-    }
+// onError Callback receives a PositionError object
+//
+function onError(error) {
+		alert('code: '    + error.code    + '\n' +
+					'message: ' + error.message + '\n');
+}
 
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
-    }
+function initialize(lat,lon) {
+  var myLatlng = new google.maps.LatLng(lat,lon);
+  var mapOptions = {
+    zoom: 15,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    </script>
-  </head>
-  <body>
-    <p id="geolocation">Waiting for location...</p>
-    <button id="btnGetCurrentPosition" onclick="getCurrentPosition();">Get Current Position</button> <br>
-    <button id="btnWatchPosition" onclick="watchPosition();">Watch Position</button> <br>  ExeFire    
-  </body>
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Hello World!'
+  });
+}
+
+</script>
+<meta charset="UTF-8">
+<style type="text/css">
+body, td, th {
+	color: #009;
+	font-family: Helvetica, Arial, sans-serif;
+}
+body {
+	background-color: #CCC;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map-canvas, #map_canvas {
+	width:300px;
+	height:300px;
+}
+@media print {
+  html, body {
+    height: auto;
+  }
+
+  #map-canvas, #map_canvas {
+    height: 650px;
+  }
+}
+</style>
+</head>
+<body>
+<p id="geolocation">Waiting for location...</p>
+<button id="btnGetCurrentPosition" onclick="getCurrentPosition();">Get Current Position</button>
+<br>
+<button id="btnWatchPosition" onclick="watchPosition();">Watch Position</button>
+<br>
+ExeFire
+<br>
+<div id="map-canvas"></div>
+</body>
 </html>
