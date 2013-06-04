@@ -79,35 +79,34 @@ function mostrar(){
 	var lat = document.getElementById('lat').value;
 	var lon = document.getElementById('lon').value;
 	var location = ( '(' + lat + ',' + lon + ')');
-	/* $.getJSON(url_master + "poly_punto.php?buscar_sector="+location+'&cosas1', function(data){
-		var precio = data['precio1'];
-		var nombre = data['nombre'];
-	}); */
+	url = url_master + "poly_punto.php?buscar_sector="+location+'&app';
 	
 	$.ajax({
-		url: 'http://www.aloocopete.cl/comandas/poly_punto.php?buscar_sector=(-33.44844633394117,%20-70.62138319015503)&cosas2',
-		dataType: 'jsonp',
-		jsonp: 'jsoncallback',
-		timeout: 10000,
-		success: function(data, status){
-			//data loaded
-			alert('OK');
+		url: url,
+		dataType: "jsonp",
+		async: true,
+		success: function (result) {
+			var nombre = result['nombre'];
+			var msg = 'Sector: ' + nombre;
+			navigator.notification.alert(
+					msg,  // message
+					alertDismissed,         // callback
+					'Aloo Copete',            // title
+					'Listo!'                  // buttonName
+			);
 		},
-		error: function(){
-			//error loading data
-			alert('error');
+		error: function (request,error) {
+			var msg = 'Error conectando con el servidor!';
+			navigator.notification.alert(
+					msg,  // message
+					alertDismissed,         // callback
+					'Aloo Copete',            // title
+					'OK'                  // buttonName
+			);
 		}
-	});
-
+	});         
 	
-	/* var msg = 'Sector: ' + nombre;
-	alert(msg);
-	navigator.notification.alert(
-			msg,  // message
-			alertDismissed,         // callback
-			'Aloo Copete',            // title
-			'Listo!'                  // buttonName
-	); */
+	
 }
 </script>
 <meta charset="UTF-8">

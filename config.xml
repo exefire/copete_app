@@ -40,6 +40,8 @@
         <!--<gap:splash src="splashes/splash.png" />-->
 
         <!-- iOS requires specific dimensions for different devices; classic iPhone screens, Retina displays, and iPad screens -->
+				<plugin name="SplashScreen" value="CDVSplashScreen" />
+				<plugin name="SplashScreen" value="org.apache.cordova.SplashScreen"/>
         <gap:splash src="splashes/splash.png"/>
         <gap:splash src="splashes/retina.png" width="640" height="960"/>
         <gap:splash src="splashes/ipad-portrait.png" width="768" height="1004"/>
