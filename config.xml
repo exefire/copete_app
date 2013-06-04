@@ -53,5 +53,7 @@
 				<plugin name="Geolocation" value="org.apache.cordova.GeoBroker" />
 				
 				<plugin name="Geolocation" value="CDVLocation" />
+				
+				<access origin="*" />
 
     </widget>
