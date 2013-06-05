@@ -11,6 +11,7 @@
 var url_master = 'http://www.aloocopete.cl/comandas/';	
 var watchID = null;
 var map;
+var marker;
 // Wait for Cordova to load
 //
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -51,6 +52,7 @@ function onSuccess(position) {
 	if(mapa_existe){
 		var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 		map.setCenter(centro);
+		marker.setPosition(centro);
 		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
 	}else{		
 		initialize(position.coords.latitude,position.coords.longitude);
@@ -86,7 +88,7 @@ function initialize(lat,lon) {
   }
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-  var marker = new google.maps.Marker({
+  marker = new google.maps.Marker({
       position: myLatlng,
       map: map,
       title: 'Tu Ubicación'
