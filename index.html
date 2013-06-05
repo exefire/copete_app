@@ -27,7 +27,7 @@ function getCurrentPosition() {
 
 function watchPosition() {
 	$.mobile.changePage("#pagina02");
-	var options = { frequency: 1000 };
+	var options = { frequency: 2000 };
 	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
 }
 // onSuccess Geolocation
@@ -139,17 +139,38 @@ html, body {
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>		
-		<p><a href="#foo">Back to foo</a></p>	    
+		<div style="text-align:center;"><img src="logo.png" width="80%" />
+    
+		<h2>Para que no pare el carrete, que no falte Copete.    </h2>
+		</div>			
+    <p>Pioneros en  delivery de tragos en Chile con más de 6 años de experiencia, un servicio rápido y discreto, abarcando las comunas de:</p>
+    <div class="ui-grid-a">
+	<div class="ui-block-a">
+	  <ul>
+	    <li>Las Condes</li>
+	    <li>Vitacura</li>
+	    <li>La Dehesa</li>
+	    <li>Providencia</li>
+	    </ul>
+	</div>
+	<div class="ui-block-b">
+	  <ul>
+	    <li>Ñuñoa</li>
+	    <li>La Reina</li>
+	    <li>Santiago</li>
+	    <li>Peñalolen</li>
+	    </ul>
+	</div>
+</div>
 	</div><!-- /content -->
 
 	<div data-role="footer">
 		<!--<h4>Page Footer</h4>-->
     <div data-role="navbar" data-iconpos="bottom">
      <ul>
-			<li><a href="#bar" class="ui-btn-active">Two</a></li>
-			<li><a href="#pagina01">One</a></li>
-			<li><a href="#">Three</a></li>
+			<li><a href="#bar" class="ui-btn-active">Inicio</a></li>
+			<li><a href="#pagina01">Pedido</a></li>
+			<li><a href="#">Acerca</a></li>
 		</ul>
     </div>
 	</div><!-- /footer -->
@@ -166,8 +187,8 @@ html, body {
   <div data-role="content">
     <h2>Relizar Pedido</h2>
     <p>Texto introductorio bla bla bla bla bla.</p>
-    <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">
-    <input type="button" onClick="watchPosition()" value="Actualizar" data-theme="b">
+    <!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
+    <input type="button" onClick="watchPosition()" value="Comenzar" data-theme="b">
 
     <input type="text" name="lat" id="lat">
     <input type="text" name="lon" id="lon">
@@ -259,7 +280,157 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content">
-    <h2>Titulo</h2>
+    <h2>Titulo4</h2>
+    
+    
+		<input type="button" onClick="window.location='#pagina05';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 04 -->
+
+
+
+
+<!-- Pasos 05 -->
+<div data-role="page" id="pagina05">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo5</h2>
+    
+    
+		<input type="button" onClick="window.location='#pagina06';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 05 -->
+
+
+
+
+<!-- Pasos 06 -->
+<div data-role="page" id="pagina06">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo6</h2>
+    
+    
+		<input type="button" onClick="window.location='#pagina07';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 06 -->
+
+
+
+
+<!-- Pasos 07 -->
+<div data-role="page" id="pagina07">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo7</h2>
+    
+    
+		<input type="button" onClick="window.location='#pagina08';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 07 -->
+
+
+
+
+<!-- Pasos 08 -->
+<div data-role="page" id="pagina08">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo8</h2>
+    
+    
+		<input type="button" onClick="window.location='#pagina09';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 08 -->
+
+
+
+
+<!-- Pasos 09 -->
+<div data-role="page" id="pagina09">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo9</h2>
     
     
 		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
@@ -277,7 +448,7 @@ html, body {
   </div>
   <!-- /footer --> 
 </div>
-<!-- fin pasos 04 -->
+<!-- fin pasos 09 -->
 
 
 
