@@ -20,37 +20,6 @@ document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 		navigator.alert('Cordova is ready');
 }
-
-function getCurrentPosition() {
-	$.mobile.changePage("#pagina02");
-	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
-}
-
-function watchPosition() {
-	$.mobile.changePage("#pagina02");
-	var options = { frequency: 2000 };
-	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
-}
-var mapa_existe = false;
-// onSuccess Geolocation
-//
-function onSuccess(position) {
-	document.getElementById('lat').value = position.coords.latitude;
-	document.getElementById('lon').value = position.coords.longitude;
-	if(mapa_existe){
-		map.setCenter(centro);
-		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
-	}else{		
-		initialize(position.coords.latitude,position.coords.longitude);
-		mapa_existe = true;
-	}
-}
-function Reubicar(position) {
-	document.getElementById('lat').value = position.coords.latitude;
-	document.getElementById('lon').value = position.coords.longitude;
-	timer_centrador(position.coords.latitude,position.coords.longitude);
-}
-
 // onError Callback receives a PositionError object
 //
 function onError(error) {
@@ -63,12 +32,40 @@ function onError(error) {
 			);
 }
 
-function timer_centrador(lat,lon) {
+function getCurrentPosition() {
+	//$.mobile.changePage("#pagina02");
+	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
+}
+
+function watchPosition() {
+	//$.mobile.changePage("#pagina02");
+	var options = { frequency: 2000 };
+	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+}
+var mapa_existe = false;
+// onSuccess Geolocation
+//
+function onSuccess(position) {
+	document.getElementById('lat').value = position.coords.latitude;
+	document.getElementById('lon').value = position.coords.longitude;
+	if(mapa_existe){
+		var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+		map.setCenter(centro);
+		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
+	}else{		
+		initialize(position.coords.latitude,position.coords.longitude);
+		mapa_existe = true;
+	}
+	timer_centrador() 
+}
+function Reubicar(position) {
+	document.getElementById('lat').value = position.coords.latitude;
+	document.getElementById('lon').value = position.coords.longitude;
+	timer_centrador(position.coords.latitude,position.coords.longitude);
+}
+function timer_centrador() {
 	// código para centrar mapa
-	document.getElementById('contador').value = document.getElementById('contador').value*1+1;
-  var centro = new google.maps.LatLng(lat,lon);
-	map.setCenter(centro);
-	countdown = setTimeout('navigator.geolocation.watchPosition(Reubicar, onError)', 2000);
+	countdown = setTimeout('getCurrentPosition()', 2000);
 }
 function iniciar_timer_map() {
 	 timer_centrador();
@@ -211,32 +208,8 @@ html, body {
     <h2>Relizar Pedido</h2>
     <p>Texto introductorio bla bla bla bla bla.</p>
     <!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
-    <input type="button" onClick="watchPosition()" value="Comenzar" data-theme="b">    
-  </div>
-  <!-- /content -->
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
-    </div>
-  </div>
-  <!-- /footer --> 
-</div>
-<!-- fin pasos 01 -->
-
-
-<!-- Pasos 02 -->
-<div data-role="page" id="pagina02">
-  <div data-role="header">
-    <h1>Aloo Copete</h1>
-  </div>
-  <!-- /header -->
-  <div data-role="content">
-  <!--<input type="button" onClick="iniciar_timer_map()" value="Contar" data-theme="b">-->
+    <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">    
+  TEXTO
   <input name="contador" type="text" id="contador" value="0">
   <div class="ui-block-a">
     <input type="text" name="lat" id="lat">
