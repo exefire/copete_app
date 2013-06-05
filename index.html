@@ -21,7 +21,8 @@ function onDeviceReady() {
 }
 
 function getCurrentPosition() {
-		navigator.geolocation.getCurrentPosition(onSuccess, onError);    
+	$.mobile.showPageLoadingMsg();
+	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
 }
 		
 function watchPosition() {
@@ -32,28 +33,24 @@ function watchPosition() {
 // onSuccess Geolocation
 //
 function onSuccess(position) {
-		var element = document.getElementById('geolocation');
-		element.innerHTML = "";
-		/* element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-												'Longitude: '          + position.coords.longitude             + '<br />' +
-												'Altitude: '           + position.coords.altitude              + '<br />' +
-												'Accuracy: '           + position.coords.accuracy              + '<br />' +
-												'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-												'Heading: '            + position.coords.heading               + '<br />' +
-												'Speed: '              + position.coords.speed                 + '<br />' +
-												'Timestamp: '          + new Date(position.timestamp)          + '<br />'; */
-		initialize(position.coords.latitude,position.coords.longitude);
-		document.getElementById('lat').value = position.coords.latitude;
-		document.getElementById('lon').value = position.coords.longitude;
-		document.getElementById('boton_inicar').style.display = 'block';
-		document.getElementById('geolocation').style.display = 'none';
+	document.getElementById('lat').value = position.coords.latitude;
+	document.getElementById('lon').value = position.coords.longitude;
+	window.location = '#pagina02';
+	initialize(position.coords.latitude,position.coords.longitude);
+	$.mobile.hidePageLoadingMsg();
 }
 
 // onError Callback receives a PositionError object
 //
 function onError(error) {
-		alert('code: '    + error.code    + '\n' +
-					'message: ' + error.message + '\n');
+	var msg = 'Error Código: ' + error.code + '\n' + 'Mensaje: ' + error.message + '\n';
+	navigator.notification.alert(
+					msg,  // message
+					alertDismissed,         // callback
+					'Aloo Copete',            // title
+					'OK'                  // buttonName
+			);
+	$.mobile.hidePageLoadingMsg();
 }
 
 function initialize(lat,lon) {
@@ -68,7 +65,7 @@ function initialize(lat,lon) {
   var marker = new google.maps.Marker({
       position: myLatlng,
       map: map,
-      title: 'Hello World!'
+      title: 'Tu Ubicación'
   });
 }
 // alert dialog dismissed
@@ -84,7 +81,7 @@ function mostrar(){
 	$.ajax({
 		url: url,
 		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
-		complete: function() { $.mobile.hidePageLoadingMsg() }, //Hide spinner
+		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
 		dataType: "jsonp",
 		async: true,
 		success: function (result) {
@@ -108,12 +105,6 @@ function mostrar(){
 		}
 	});
 }
-$( document ).bind( 'mobileinit', function(){
-  $.mobile.loader.prototype.options.text = "cargando";
-  $.mobile.loader.prototype.options.textVisible = false;
-  $.mobile.loader.prototype.options.theme = "a";
-  $.mobile.loader.prototype.options.html = "";
-});
 </script>
 <meta charset="UTF-8">
 <style type="text/css">
@@ -139,44 +130,7 @@ html, body {
 </style>
 <link href="jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css">
 </head>
-<body onLoad="getCurrentPosition()">
-
-
-
-<!-- Start of first page -->
-<div data-role="page" id="inicio">
-  <div data-role="header">
-    <h1>Aloo Copete</h1>
-  </div>
-  <!-- /header -->
-  
-  <div data-role="content">
-    <div id="geolocation" style="padding:10px; text-align:center;">Cargando ubicación...</div>
-    <div id="map-canvas"></div>
-    <input type="hidden" name="lat" id="lat">
-    <input type="hidden" name="lon" id="lon">
-    <div id="boton_inicar" style="display:none; padding:10px; text-align:center;">
-    <input type="button" onClick="mostrar()" value="Iniciar Pedido">
-    </div>
-
-  </div>
-  <!-- /content -->
-  
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#inicio" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
-    </div>
-  </div>
-  <!-- /footer --> 
-</div>
-<!-- /page -->
-
-
+<body>
 
 
 
@@ -196,13 +150,96 @@ html, body {
 		<!--<h4>Page Footer</h4>-->
     <div data-role="navbar" data-iconpos="bottom">
      <ul>
-			<li><a href="#inicio">One</a></li>
 			<li><a href="#bar" class="ui-btn-active">Two</a></li>
+			<li><a href="#pagina01">One</a></li>
 			<li><a href="#">Three</a></li>
 		</ul>
     </div>
 	</div><!-- /footer -->
 </div><!-- /page -->
+
+
+
+<!-- Pasos 01 -->
+<div data-role="page" id="pagina01">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Relizar Pedido</h2>
+    <p>Texto introductorio bla bla bla bla bla.</p>
+    <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">
+    
+    <input type="text" name="lat" id="lat">
+    <input type="text" name="lon" id="lon">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 01 -->
+
+
+<!-- Pasos 02 -->
+<div data-role="page" id="pagina02">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+      <h2>Tu Ubicación</h2>
+      <div id="map-canvas"></div>
+      <input type="button" onClick="window.location='#pagina03';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 02 -->
+
+
+<!-- Pasos 03 -->
+<div data-role="page" id="pagina03">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    123
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 03 -->
 
 
 
