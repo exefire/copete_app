@@ -34,7 +34,7 @@ function onError(error) {
 }
 
 function getCurrentPosition() {
-	//$.mobile.changePage("#pagina02");
+	$.mobile.changePage("#pagina02");
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
 }
 
@@ -211,7 +211,31 @@ html, body {
     <p>Texto introductorio bla bla bla bla bla.</p>
     <!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
     <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">    
-  TEXTO
+    </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 01 -->
+
+
+<!-- Pasos 02 -->
+<div data-role="page" id="pagina02">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+  <!--<input type="button" onClick="iniciar_timer_map()" value="Contar" data-theme="b">-->
   <input name="contador" type="text" id="contador" value="0">
   <div class="ui-block-a">
     <input type="text" name="lat" id="lat">
