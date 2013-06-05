@@ -21,7 +21,7 @@ function onDeviceReady() {
 }
 
 function getCurrentPosition() {
-	$.mobile.showPageLoadingMsg();
+	$.mobile.changePage("#pagina02");
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
 }
 		
@@ -35,9 +35,7 @@ function watchPosition() {
 function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
 	document.getElementById('lon').value = position.coords.longitude;
-	window.location = '#pagina02';
 	initialize(position.coords.latitude,position.coords.longitude);
-	$.mobile.hidePageLoadingMsg();
 }
 
 // onError Callback receives a PositionError object
@@ -50,7 +48,6 @@ function onError(error) {
 					'Aloo Copete',            // title
 					'OK'                  // buttonName
 			);
-	$.mobile.hidePageLoadingMsg();
 }
 
 function initialize(lat,lon) {
@@ -198,7 +195,7 @@ html, body {
   <!-- /header -->
   <div data-role="content">
       <h2>Tu Ubicación</h2>
-      <div id="map-canvas"></div>
+      <div id="map-canvas" style="border:#666 solid 1px;"></div>
       <input type="button" onClick="window.location='#pagina03';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
@@ -224,7 +221,17 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content">
-    123
+    <h2>Tus Datos</h2>
+    <div data-role="fieldcontain">
+      <label for="cliente_nombre">Nombre:</label>
+      <input type="text" name="cliente_nombre" id="cliente_nombre" value="" />
+    </div>
+
+    <div data-role="fieldcontain">
+      <label for="cliente_telefono">Teléfono:</label>
+      <input type="number" name="cliente_telefono" id="cliente_telefono" value="" />
+    </div>
+		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
   <div data-role="footer">
@@ -240,6 +247,36 @@ html, body {
   <!-- /footer --> 
 </div>
 <!-- fin pasos 03 -->
+
+
+
+
+<!-- Pasos 04 -->
+<div data-role="page" id="pagina04">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo</h2>
+    
+    
+		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+  <div data-role="footer">
+    <!--<h4>Delivery - Carrete Seguro</h4>-->
+    <div data-role="navbar" data-iconpos="bottom">
+     <ul>
+			<li><a href="#bar">Two</a></li>
+			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+			<li><a href="#">Three</a></li>
+		</ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- fin pasos 04 -->
 
 
 
