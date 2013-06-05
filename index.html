@@ -24,11 +24,11 @@ function getCurrentPosition() {
 	$.mobile.changePage("#pagina02");
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
 }
-		
+
 function watchPosition() {
-		// Update every 3 seconds
-		var options = { frequency: 3000 };
-		watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);        
+	// Update every 3 seconds
+	var options = { frequency: 3000 };
+	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
 }
 // onSuccess Geolocation
 //
@@ -167,7 +167,8 @@ html, body {
     <h2>Relizar Pedido</h2>
     <p>Texto introductorio bla bla bla bla bla.</p>
     <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">
-    
+    <input type="button" onClick="watchPosition()" value="Actualizar" data-theme="b">
+
     <input type="text" name="lat" id="lat">
     <input type="text" name="lon" id="lon">
   </div>
@@ -229,7 +230,7 @@ html, body {
 
     <div data-role="fieldcontain">
       <label for="cliente_telefono">Teléfono:</label>
-      <input type="number" name="cliente_telefono" id="cliente_telefono" value="" />
+      <input type="number" name="cliente_telefono" id="cliente_telefono" pattern="[0-9]*" value="" />
     </div>
 		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
   </div>
