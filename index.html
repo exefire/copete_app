@@ -38,11 +38,11 @@ function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
 	document.getElementById('lon').value = position.coords.longitude;
 	if(mapa_existe){
-		initialize(position.coords.latitude,position.coords.longitude);
-		mapa_existe = true;
-	}else{
 		map.setCenter(centro);
 		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
+	}else{		
+		initialize(position.coords.latitude,position.coords.longitude);
+		mapa_existe = true;
 	}
 }
 function Reubicar(position) {
