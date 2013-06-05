@@ -10,6 +10,7 @@
 <script type="text/javascript" charset="utf-8">
 var url_master = 'http://www.aloocopete.cl/comandas/';	
 var watchID = null;
+var map;
 // Wait for Cordova to load
 //
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -36,6 +37,12 @@ function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
 	document.getElementById('lon').value = position.coords.longitude;
 	initialize(position.coords.latitude,position.coords.longitude);
+	timer_centrador(position.coords.latitude,position.coords.longitude);
+}
+function Reubicar(position) {
+	document.getElementById('lat').value = position.coords.latitude;
+	document.getElementById('lon').value = position.coords.longitude;
+	timer_centrador(position.coords.latitude,position.coords.longitude);
 }
 
 // onError Callback receives a PositionError object
@@ -50,6 +57,23 @@ function onError(error) {
 			);
 }
 
+function timer_centrador(lat,lon) {
+	// código para centrar mapa
+	document.getElementById('contador').value = document.getElementById('contador').value*1+1;
+  var centro = new google.maps.LatLng(lat,lon);
+	map.setCenter(centro);
+	countdown = setTimeout('navigator.geolocation.getCurrentPosition(Reubicar, onError)', 2000);
+}
+function iniciar_timer_map() {
+	 timer_centrador();
+}
+function detener_timer_map() {
+	clearTimeout(countdown);
+}
+// alert dialog dismissed
+function alertDismissed() {
+		// do something
+}
 function initialize(lat,lon) {
   var myLatlng = new google.maps.LatLng(lat,lon);
   var mapOptions = {
@@ -57,17 +81,13 @@ function initialize(lat,lon) {
     center: myLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
   var marker = new google.maps.Marker({
       position: myLatlng,
       map: map,
       title: 'Tu Ubicación'
   });
-}
-// alert dialog dismissed
-function alertDismissed() {
-		// do something
 }
 function mostrar(){
 	var lat = document.getElementById('lat').value;
@@ -119,7 +139,7 @@ html, body {
 	position:relative !important;
 }
 [data-role=footer] {
-	bottom:0;
+	bottom:0 !important;
 	position:absolute !important;
 	top: auto !important;
 	width:100%;
@@ -139,14 +159,11 @@ html, body {
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<div style="text-align:center;"><img src="logo.png" width="80%" />
-    
-		<h2>Para que no pare el carrete, que no falte Copete.    </h2>
-		</div>			
+		<div style="text-align:center;"><img src="logo.png" width="70%" /></div>			
     <p>Pioneros en  delivery de tragos en Chile con más de 6 años de experiencia, un servicio rápido y discreto, abarcando las comunas de:</p>
     <div class="ui-grid-a">
 	<div class="ui-block-a">
-	  <ul>
+	  <ul style="margin:0px;">
 	    <li>Las Condes</li>
 	    <li>Vitacura</li>
 	    <li>La Dehesa</li>
@@ -154,7 +171,7 @@ html, body {
 	    </ul>
 	</div>
 	<div class="ui-block-b">
-	  <ul>
+	  <ul style="margin:0px;">
 	    <li>Ñuñoa</li>
 	    <li>La Reina</li>
 	    <li>Santiago</li>
@@ -166,7 +183,7 @@ html, body {
 
 	<div data-role="footer">
 		<!--<h4>Page Footer</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
+    <div data-role="navbar" data-iconpos="bottom" >
      <ul>
 			<li><a href="#bar" class="ui-btn-active">Inicio</a></li>
 			<li><a href="#pagina01">Pedido</a></li>
@@ -188,7 +205,7 @@ html, body {
     <h2>Relizar Pedido</h2>
     <p>Texto introductorio bla bla bla bla bla.</p>
     <!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
-    <input type="button" onClick="watchPosition()" value="Comenzar" data-theme="b">
+    <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">
 
     <input type="text" name="lat" id="lat">
     <input type="text" name="lon" id="lon">
@@ -219,6 +236,8 @@ html, body {
       <h2>Tu Ubicación</h2>
       <div id="map-canvas" style="border:#666 solid 1px;"></div>
       <input type="button" onClick="window.location='#pagina03';" value="Siguiente" data-theme="b">
+<input type="button" onClick="iniciar_timer_map()" value="Contar" data-theme="b">
+  <input name="contador" type="text" id="contador" value="0">
   </div>
   <!-- /content -->
   <div data-role="footer">
