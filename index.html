@@ -27,7 +27,7 @@ function onDeviceReady() {
 // onError Callback receives a PositionError object
 //
 function onError(error) {
-	var msg = 'Error Código: ' + error.code + '\n' + 'Mensaje: ' + error.message + '\n';
+	var msg = 'No se ha podido obtener la ubicación.';
 	navigator.notification.alert(
 					msg,  // message
 					alertDismissed,         // callback
@@ -35,15 +35,9 @@ function onError(error) {
 					'OK'                  // buttonName
 			);
 }
-
 function getCurrentPosition() {
-	$.mobile.changePage("#pagina02");
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
 }
-
-
-
-
 function watchPosition() {
 	var options = { frequency: 1000 };
 	watchID = navigator.geolocation.watchPosition(posicion_ok, onError, options);
@@ -63,7 +57,6 @@ function posicion_ok(position){
 	var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 	map.setCenter(centro);
 	marker.setPosition(centro);
-	
 	// Dibuja un circulo con el radio 0
 	draw_circle.setMap(null);
 	var rad = position.coords.accuracy;
@@ -77,61 +70,17 @@ function posicion_ok(position){
 			fillOpacity: 0.35,
 			map: map
 	});
-
 	// Acerca al circulo
 	map.fitBounds(draw_circle.getBounds());
 	zoom = map.getZoom();
-	if(zoom>17){
+	if(zoom>17){// Si el zoom es mucho, lo deja en 17
 		map.setZoom(17);
-		document.getElementById('lat').value = 'Z-17';
-	}else{
-		document.getElementById('lat').value = 'z' + zoom;
 	}
-	
-	// Debug
-	document.getElementById('presicion').value = rad;
-	document.getElementById('contador').value = document.getElementById('contador').value*1+1;
 }
-
-
-
-
 function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
 	document.getElementById('lon').value = position.coords.longitude;
-	if(mapa_existe){
-		var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-		map.setCenter(centro);
-		marker.setPosition(centro);
-		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
-	}else{		
-		initialize(position.coords.latitude,position.coords.longitude);
-		mapa_existe = true;
-	}
-	timer_centrador();
 }
-function Reubicar(position) {
-	document.getElementById('lat').value = position.coords.latitude;
-	document.getElementById('lon').value = position.coords.longitude;
-	timer_centrador(position.coords.latitude,position.coords.longitude);
-}
-function timer_centrador() {
-	// código para centrar mapa
-	countdown = setTimeout('getCurrentPosition()', 2000);
-}
-function iniciar_timer_map() {
-	 timer_centrador();
-}
-function detener_timer_map() {
-	clearTimeout(countdown);
-}
-// alert dialog dismissed
-function alertDismissed() {
-		// do something
-}
-
-
-
 function initialize(lat,lon) {
   var myLatlng = new google.maps.LatLng(lat,lon);
   var mapOptions = {
@@ -228,7 +177,7 @@ html, body {
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<div style="text-align:center;"><img src="logo.png" width="70%" /></div>			
+		<div style="text-align:center;"><img src="logo.png" width="40%" /></div>			
     <p>Pioneros en  delivery de tragos en Chile con más de 6 años de experiencia, un servicio rápido y discreto, abarcando las comunas de:</p>
     <div class="ui-grid-a">
 	<div class="ui-block-a">
@@ -305,18 +254,8 @@ html, body {
     <div>
     	<input type="button" onClick="window.location='#pagina03';" value="Siguiente" data-theme="b">
     </div>
-    <div class="ui-block-a">
-      <input type="text" name="lat" id="lat" size="4">
-    </div>
-    <div class="ui-block-b">
-      <input type="text" name="lon" id="lon" size="4">
-    </div>
-    <div class="ui-block-c">
-      <input name="contador" type="text" id="contador" size="4" value="0">
-    </div>
-    <div class="ui-block-d">
-      <input name="presicion" type="text" id="presicion" size="4">
-    </div>
+      <input type="hidden" name="lat" id="lat">
+      <input type="hidden" name="lon" id="lon">
   </div>
   <!-- /content -->
   <div data-role="footer">
