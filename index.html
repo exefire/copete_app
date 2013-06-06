@@ -41,28 +41,50 @@ function getCurrentPosition() {
 }
 
 
+
+
 function watchPosition() {
 	var options = { frequency: 1000 };
 	watchID = navigator.geolocation.watchPosition(posicion_ok, onError, options);
 }
 function inicia_posicion(){
+	// Cambia de página
 	$.mobile.changePage("#pagina02");
+	// Inicia el mapa en la plaza de armas
+	initialize(-33.437782,-70.64981);
+	// Encuentra la ubicación actual
 	watchPosition();
 }
 function posicion_ok(position){
 	document.getElementById('lat').value = position.coords.latitude;
 	document.getElementById('lon').value = position.coords.longitude;
-	document.getElementById('accuracy').value = position.coords.longitude;
-	if(mapa_existe){
-		var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-		map.setCenter(centro);
-		marker.setPosition(centro);
-		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
-	}else{		
-		initialize(position.coords.latitude,position.coords.longitude);
-		mapa_existe = true;
-	}
+	// Vuelve a centrar el mapa
+	var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+	map.setCenter(centro);
+	marker.setPosition(centro);
+	
+	// Dibuja un circulo con el radio rad
+	var rad = position.coords.accuracy;
+	draw_circle = new google.maps.Circle({
+			center: centro,
+			radius: rad,
+			strokeColor: "#9999FF",
+			strokeOpacity: 0.8,
+			strokeWeight: 1,
+			fillColor: "#BFDFFF",
+			fillOpacity: 0.35,
+			map: map
+	});
+	
+	// Acerca al circulo
+	map.fitBounds(draw_circle.getBounds());
+	
+	// Debug
+	document.getElementById('presicion').value = rad;
+	document.getElementById('contador').value = document.getElementById('contador').value*1+1;
 }
+
+
 
 
 function onSuccess(position) {
@@ -270,7 +292,7 @@ html, body {
       <input name="contador" type="text" id="contador" size="4" value="0">
     </div>
     <div class="ui-block-d">
-      <input name="presicion" type="text" id="contador" size="4" value="0">
+      <input name="presicion" type="text" id="presicion" size="4">
     </div>
   </div>
   <!-- /content -->
