@@ -65,6 +65,7 @@ function posicion_ok(position){
 	marker.setPosition(centro);
 	
 	// Dibuja un circulo con el radio 0
+	draw_circle.setMap(null);
 	var rad = position.coords.accuracy;
 	draw_circle = new google.maps.Circle({
 			center: centro,
