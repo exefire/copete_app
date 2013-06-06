@@ -129,6 +129,9 @@ function detener_timer_map() {
 function alertDismissed() {
 		// do something
 }
+
+
+
 function initialize(lat,lon) {
   var myLatlng = new google.maps.LatLng(lat,lon);
   var mapOptions = {
@@ -143,6 +146,17 @@ function initialize(lat,lon) {
       map: map,
       title: 'Tu Ubicación'
   });
+	var rad = 0;
+	draw_circle = new google.maps.Circle({
+			center: myLatlng,
+			radius: rad,
+			strokeColor: "#9999FF",
+			strokeOpacity: 0.8,
+			strokeWeight: 1,
+			fillColor: "#BFDFFF",
+			fillOpacity: 0.35,
+			map: map
+	});
 }
 function mostrar(){
 	var lat = document.getElementById('lat').value;
