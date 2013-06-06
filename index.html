@@ -64,7 +64,7 @@ function posicion_ok(position){
 	map.setCenter(centro);
 	marker.setPosition(centro);
 	
-	// Dibuja un circulo con el radio rad
+	// Dibuja un circulo con el radio 0
 	var rad = position.coords.accuracy;
 	draw_circle = new google.maps.Circle({
 			center: centro,
@@ -76,9 +76,16 @@ function posicion_ok(position){
 			fillOpacity: 0.35,
 			map: map
 	});
-	
+
 	// Acerca al circulo
 	map.fitBounds(draw_circle.getBounds());
+	zoom = map.getZoom();
+	if(zoom>17){
+		map.setZoom(17);
+		document.getElementById('lat').value = 'Z-17';
+	}else{
+		document.getElementById('lat').value = 'z' + zoom;
+	}
 	
 	// Debug
 	document.getElementById('presicion').value = rad;
