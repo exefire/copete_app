@@ -12,6 +12,8 @@ var url_master = 'http://www.aloocopete.cl/comandas/';
 var watchID = null;
 var map;
 var marker;
+var mapa_existe = false;
+
 // Wait for Cordova to load
 //
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -38,14 +40,31 @@ function getCurrentPosition() {
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
 }
 
+
 function watchPosition() {
-	//$.mobile.changePage("#pagina02");
-	var options = { frequency: 2000 };
-	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+	var options = { frequency: 1000 };
+	watchID = navigator.geolocation.watchPosition(posicion_ok, onError, options);
 }
-var mapa_existe = false;
-// onSuccess Geolocation
-//
+function inicia_posicion(){
+	$.mobile.changePage("#pagina02");
+	watchPosition();
+}
+function posicion_ok(position){
+	document.getElementById('lat').value = position.coords.latitude;
+	document.getElementById('lon').value = position.coords.longitude;
+	document.getElementById('accuracy').value = position.coords.longitude;
+	if(mapa_existe){
+		var centro = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+		map.setCenter(centro);
+		marker.setPosition(centro);
+		document.getElementById('contador').value = document.getElementById('contador').value*1+1;
+	}else{		
+		initialize(position.coords.latitude,position.coords.longitude);
+		mapa_existe = true;
+	}
+}
+
+
 function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
 	document.getElementById('lon').value = position.coords.longitude;
@@ -58,7 +77,7 @@ function onSuccess(position) {
 		initialize(position.coords.latitude,position.coords.longitude);
 		mapa_existe = true;
 	}
-	timer_centrador() 
+	timer_centrador();
 }
 function Reubicar(position) {
 	document.getElementById('lat').value = position.coords.latitude;
@@ -210,7 +229,7 @@ html, body {
     <h2>Relizar Pedido</h2>
     <p>Texto introductorio bla bla bla bla bla.</p>
     <!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
-    <input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">    
+    <input type="button" onClick="inicia_posicion()" value="Comenzar" data-theme="b">    
     </div>
   <!-- /content -->
   <div data-role="footer">
@@ -242,13 +261,16 @@ html, body {
     	<input type="button" onClick="window.location='#pagina03';" value="Siguiente" data-theme="b">
     </div>
     <div class="ui-block-a">
-      <input type="text" name="lat" id="lat">
+      <input type="text" name="lat" id="lat" size="4">
     </div>
     <div class="ui-block-b">
-      <input type="text" name="lon" id="lon">
+      <input type="text" name="lon" id="lon" size="4">
     </div>
     <div class="ui-block-c">
-      <input name="contador" type="text" id="contador" value="0">
+      <input name="contador" type="text" id="contador" size="4" value="0">
+    </div>
+    <div class="ui-block-d">
+      <input name="presicion" type="text" id="contador" size="4" value="0">
     </div>
   </div>
   <!-- /content -->
