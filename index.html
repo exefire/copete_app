@@ -17,12 +17,15 @@ var draw_circle;
 
 // Wait for Cordova to load
 //
-document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener("deviceready", onDeviceReady, true);
 
 // Cordova is ready
 //
 function onDeviceReady() {
-		navigator.alert('Cordova is ready');
+		navigator.notification.alert('Cordova is ready');
+}
+function alertDismissed() {
+    // hacer algo
 }
 // onError Callback receives a PositionError object
 //
