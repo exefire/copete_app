@@ -153,6 +153,10 @@ function mostrar(){
 		}
 	});
 }
+function nuevo_producto(){
+	// agrega nuevo producto.
+	$('.ui-dialog').dialog('close');
+}
 </script>
 <meta charset="UTF-8">
 <style type="text/css">
@@ -270,18 +274,6 @@ html, body {
       <input type="hidden" name="lat" id="lat">
       <input type="hidden" name="lon" id="lon">
   </div>
-  <!-- /content -->
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
-    </div>
-  </div>
-  <!-- /footer --> 
 </div>
 <!-- fin pasos 02 -->
 
@@ -306,17 +298,6 @@ html, body {
 		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
-    </div>
-  </div>
-  <!-- /footer --> 
 </div>
 <!-- fin pasos 03 -->
 
@@ -330,23 +311,33 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content">
-    <h2>Titulo4</h2>
+    <h2>Dirección Exacta</h2>
     
+    <div data-role="fieldcontain">
+      <label for="cliente_nombre">Calle:</label>
+      <input type="text" name="direccion_calle" id="direccion_calle" value="" />
+    </div>
+    <div data-role="fieldcontain">
+      <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <label for="cliente_nombre">Nº:</label>
+            <input type="text" name="direccion_numero" id="direccion_numero" value="" />
+        </div>
+        <div class="ui-block-b">
+            <label for="cliente_nombre">Dpto / Casa:</label>
+            <input type="text" name="direccion_otro" id="direccion_otro" value="" />
+        </div>
+      </div>
+    </div>
+    <div data-role="fieldcontain">
+      <label for="cliente_nombre">Comuna:</label>
+      <input type="text" name="direccion_comuna" id="direccion_comuna" value="" />
+    </div>
+
     
 		<input type="button" onClick="window.location='#pagina05';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
-    </div>
-  </div>
-  <!-- /footer --> 
 </div>
 <!-- fin pasos 04 -->
 
@@ -360,26 +351,74 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content">
-    <h2>Titulo5</h2>
-    
-    
+    <h2>Productos</h2>
+    <table width="100%" border="0" cellpadding="5" cellspacing="0">
+      <tr>
+        <td width="60%">a</td>
+        <td width="20%">b</td>
+        <td width="20%">c</td>
+      </tr>
+      <tr>
+        <td>d</td>
+        <td>e</td>
+        <td>f</td>
+      </tr>
+      <tr>
+        <td>g</td>
+        <td>h</td>
+        <td>i</td>
+      </tr>
+      <tr>
+        <td>j</td>
+        <td>k</td>
+        <td>l</td>
+      </tr>
+      <tr>
+        <td>m</td>
+        <td>n</td>
+        <td>o</td>
+      </tr>
+    </table>
+    <div class="ui-grid-a">
+      <div class="ui-block-a"><a href="#nuevo_producto" data-rel="dialog" data-role="button" data-theme="b">+ Producto</a></div>
+        <div class="ui-block-b">&nbsp;</div>
+      </div>
 		<input type="button" onClick="window.location='#pagina06';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
-    </div>
-  </div>
-  <!-- /footer --> 
 </div>
 <!-- fin pasos 05 -->
 
+
+<!--Nuevo Producto-->
+<div data-role="page" id="nuevo_producto">
+  <div data-role="content">
+    <h2>Agregar Producto</h2>
+    
+    <div data-role="fieldcontain">
+      <label for="producto_nuevo">Producto:</label>
+      <select name="producto_nuevo" id="producto_nuevo">
+        <option value="1">a</option>
+        <option value="2">b</option>
+        <option value="3">c</option>
+        <option value="4">d</option>
+      </select>
+    </div>
+
+    <div data-role="fieldcontain">
+      <label for="producto_nuevo_n">Cantidad:</label>
+      <input type="number" name="producto_nuevo_n" id="v" pattern="[0-9]*" value="" />
+    </div>
+    
+    <div class="ui-grid-a">
+      <div class="ui-block-a"><input type="button" onClick="$('.ui-dialog').dialog('close')" value="Cancelar" data-theme="a" data-rel="back"></div>
+      <div class="ui-block-b"><input type="button" onClick="nuevo_producto()" value="Agregar" data-theme="b"></div>
+      </div>
+  </div>
+  <!-- /content -->
+  <!-- /footer --> 
+</div>
+<!--Fin Nuevo Producto-->
 
 
 
