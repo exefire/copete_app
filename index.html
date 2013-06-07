@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 <script type="text/javascript" charset="utf-8" src="jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" charset="utf-8">
 var url_master = 'http://www.aloocopete.cl/comandas/';	
@@ -46,7 +45,9 @@ function inicia_posicion(){
 	// Cambia de página
 	$.mobile.changePage("#pagina02");
 	// Inicia el mapa en la plaza de armas
-	initialize(-33.437782,-70.64981);
+	if (map == null) { // si map no está definido, lo define en la plaza de armas
+		initialize(-33.437782,-70.64981);
+	}
 	// Encuentra la ubicación actual
 	watchPosition();
 }
@@ -106,6 +107,19 @@ function initialize(lat,lon) {
 			fillOpacity: 0.35,
 			map: map
 	});
+	msg('Mapa listo');
+}
+function msg(msg){
+	if(navigator.notification==null){
+		alert(msg);
+	}else{
+		navigator.notification.alert(
+				msg,  					// message
+				alertDismissed, // callback
+				'Aloo Copete',  // title
+				'OK'            // buttonName
+		);
+	}
 }
 function mostrar(){
 	var lat = document.getElementById('lat').value;
