@@ -107,19 +107,14 @@ function initialize(lat,lon) {
 			fillOpacity: 0.35,
 			map: map
 	});
-	msg('Mapa listo');
 }
 function msg(msg){
-	if(navigator.notification==null){
-		alert(msg);
-	}else{
-		navigator.notification.alert(
-				msg,  					// message
-				alertDismissed, // callback
-				'Aloo Copete',  // title
-				'OK'            // buttonName
-		);
-	}
+	navigator.notification.alert(
+			msg,  					// message
+			alertDismissed, // callback
+			'Aloo Copete',  // title
+			'OK'            // buttonName
+	);
 }
 function mostrar(){
 	var lat = document.getElementById('lat').value;
@@ -179,7 +174,7 @@ html, body {
 </style>
 <link href="jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body onload"msg('Mapa listo')">
 
 
 
