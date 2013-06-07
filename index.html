@@ -156,7 +156,12 @@ function mostrar(){
 function nuevo_producto(){
 	// agrega nuevo producto.
 	$('.ui-dialog').dialog('close');
+	$('#lista_productos').append('<p>Test: ' + document.getElementById('producto_nuevo_n').value + '</p>');
 }
+$("#nuevo_producto").live('pagebeforeshow', function() {
+	$('#producto_nuevo_id').prop('selectedIndex',2);
+	document.getElementById('producto_nuevo_n').value = '';
+});
 </script>
 <meta charset="UTF-8">
 <style type="text/css">
@@ -352,33 +357,8 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Productos</h2>
-    <table width="100%" border="0" cellpadding="5" cellspacing="0">
-      <tr>
-        <td width="60%">a</td>
-        <td width="20%">b</td>
-        <td width="20%">c</td>
-      </tr>
-      <tr>
-        <td>d</td>
-        <td>e</td>
-        <td>f</td>
-      </tr>
-      <tr>
-        <td>g</td>
-        <td>h</td>
-        <td>i</td>
-      </tr>
-      <tr>
-        <td>j</td>
-        <td>k</td>
-        <td>l</td>
-      </tr>
-      <tr>
-        <td>m</td>
-        <td>n</td>
-        <td>o</td>
-      </tr>
-    </table>
+    <div id="lista_productos"></div>
+    <hr>
     <div class="ui-grid-a">
       <div class="ui-block-a"><a href="#nuevo_producto" data-rel="dialog" data-role="button" data-theme="b">+ Producto</a></div>
         <div class="ui-block-b">&nbsp;</div>
@@ -396,18 +376,49 @@ html, body {
     <h2>Agregar Producto</h2>
     
     <div data-role="fieldcontain">
-      <label for="producto_nuevo">Producto:</label>
-      <select name="producto_nuevo" id="producto_nuevo">
-        <option value="1">a</option>
-        <option value="2">b</option>
-        <option value="3">c</option>
-        <option value="4">d</option>
+      <label for="producto_nuevo_id">Producto:</label>
+      <select name="producto_nuevo_id" id="producto_nuevo_id">
+        <option value="">Seleccione</option>
+        <option value="1">BEBIDAS: COCA COLA 1.5 DESECHABLE1 </option>
+        <option value="2">BEBIDAS: COCA COLA LIGHT 1.5 2 </option>
+        <option value="3">BEBIDAS: COCA COLA ZERO 1.53 </option>
+        <option value="4">BEBIDAS: NORDIC GINGER ALE 1.5 4 </option>
+        <option value="5">BEBIDAS: SPRITE 1.55 </option>
+        <option value="6">BEBIDAS: TONICA NORDIC 1.5 6 </option>
+        <option value="7">CERVEZA: BECKER 1LT DESECHABLE 7 </option>
+        <option value="8">CERVEZA: CORONA SIX PACK BOTELLA 8 </option>
+        <option value="9">CERVEZA: ESCUDO SIX PACK LATA CHICA9 </option>
+        <option value="10">CERVEZA: ESCUDO SIX PACK LATA MEDIO10</option>
+        <option value="11">CERVEZA: HEINEKEN SIX PACK LATA11</option>
+        <option value="12">CERVEZA: HEINEKENT 1LT DESECHABLE12</option>
+        <option value="13">CHAMPAGNE: VALDIVIESO BRUT 750ML 13</option>
+        <option value="14">CIGARRO: LUCKY CLIC 20 14</option>
+        <option value="15">ENERGETICA: RED BULL 250ML15</option>
+        <option value="16">HIELO: HIELO 1 KG16</option>
+        <option value="17">JUGO: ANDINA NARANJA17</option>
+        <option value="18">PISCO: ALTO DEL CARMEN 3518</option>
+        <option value="19">PISCO: CAPEL 3519</option>
+        <option value="20">PISCO: MISTRAL 3520</option>
+        <option value="21">RON: DOMINICAM 750 21</option>
+        <option value="22">RON: FLOR DE CAÑA 75022</option>
+        <option value="23">RON: HAVANA 1LT23</option>
+        <option value="24">RON: PAMPERO 750 24</option>
+        <option value="25">TEQUILA: SOMBRERO NEGRO25</option>
+        <option value="26">VINO: MISIONES DE RENGO CHARDONNAY26</option>
+        <option value="27">VINO: MISIONES DE RENGO RESERVA CABERNET SAUVIGNON27</option>
+        <option value="28">VINO: MISIONES DE RENGO SAUVIGNON BLANC 28</option>
+        <option value="29">VINO: MISIONES DE RENGO VARIETAL CABERNET SAUVIGNON 29</option>
+        <option value="30">VODKA: ABSOLUT 750 30</option>
+        <option value="31">VODKA: PL 75031</option>
+        <option value="32">VODKA: STOLICHNAYA 1LT 32</option>
+        <option value="33">WHISKY: JACK DANIELS 75033</option>
+        <option value="34">WHISKY: JOHNNIE WALKER RED LABEL 75034</option>
       </select>
     </div>
 
     <div data-role="fieldcontain">
       <label for="producto_nuevo_n">Cantidad:</label>
-      <input type="number" name="producto_nuevo_n" id="v" pattern="[0-9]*" value="" />
+      <input type="number" name="producto_nuevo_n" id="producto_nuevo_n" pattern="[0-9]*" value="" />
     </div>
     
     <div class="ui-grid-a">
