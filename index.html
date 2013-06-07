@@ -22,7 +22,7 @@ document.addEventListener("deviceready", onDeviceReady, true);
 // Cordova is ready
 //
 function onDeviceReady() {
-		navigator.notification.alert('Cordova is ready');
+		//navigator.notification.alert('Cordova is ready');
 }
 function alertDismissed() {
     // hacer algo
@@ -48,6 +48,12 @@ function watchPosition() {
 function inicia_posicion(){
 	// Cambia de página
 	$.mobile.changePage("#pagina02");
+		$.mobile.loading( 'show', {
+		text: 'Localizando',
+		textVisible: true,
+		theme: 'a',
+		html: ""
+	});
 	// Inicia el mapa en la plaza de armas
 	if(map == null){
 		initialize(-33.437782,-70.64981);
@@ -81,6 +87,7 @@ function posicion_ok(position){
 	if(zoom>17){// Si el zoom es mucho, lo deja en 17
 		map.setZoom(17);
 	}
+	$.mobile.hidePageLoadingMsg();
 }
 function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
@@ -133,6 +140,7 @@ function mostrar(){
 					'Aloo Copete',            // title
 					'Listo!'                  // buttonName
 			);
+			$.mobile.changePage("#pagina03");
 		},
 		error: function (request,error) {
 			var msg = 'Error conectando con el servidor!';
