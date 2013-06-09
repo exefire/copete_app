@@ -113,14 +113,15 @@ function initialize(lat,lon) {
 	});
 }
 function msg(texto){
-	alert(texto);
-	/* navigator.notification.alert(
+	//alert(texto);
+	 navigator.notification.alert(
 			texto,  				// message
 			alertDismissed, // callback
 			'Aloo Copete',  // title
 			'Listo!'        // buttonName
-	); */
+	); 
 }
+var precio_despacho = 0;
 function mostrar(){
 	var lat = document.getElementById('lat').value;
 	var lon = document.getElementById('lon').value;
@@ -135,9 +136,11 @@ function mostrar(){
 		async: true,
 		success: function (result) {
 			var nombre = result['nombre'];
+			precio_despacho = result['precio1'];
 			var texto = 'Sector: ' + nombre;
 			msg(texto);
 			$.mobile.changePage("#pagina03");
+			$("#valor_despacho").html(FormatoDinero(precio_despacho));
 		},
 		error: function (request,error) {
 			var texto = 'Error conectando con el servidor!';
@@ -145,26 +148,54 @@ function mostrar(){
 		}
 	});
 }
+function eliminar_producto(id){
+	$("#producto_linea"+id).empty();
+	pedido_producto[id] = 0;
+	pedido_cantidad[id] = 0;
+	suma_total();
+}
+function suma_total(){
+	var valor = 0;
+	valor = valor*1 + precio_despacho*1;
+	$.each(pedido_producto, function(index, value) {
+		if(value > 0){
+			valor = valor + productos_precio[value] * pedido_cantidad[index];
+		}
+	});
+	$("#valor_total").html(FormatoDinero(valor));
+}
+var pedido_producto = [];
+var pedido_cantidad = [];
 function nuevo_producto(){
 	// agrega nuevo producto.
 	producto_temp_id = document.getElementById('producto_nuevo_id').value;
 	producto_temp_n = document.getElementById('producto_nuevo_n').value;
+	
+	var id = pedido_producto.length;
+		
+	pedido_producto[id] = producto_temp_id;
+	pedido_cantidad[id] = producto_temp_n;
+	
 	$('.ui-dialog').dialog('close');
-	texto = '<input name="productos_matriz[]" id="productos_matriz[]" type="hidden" value="'+producto_temp_id+'">';
+	texto = '<div id="producto_linea'+id+'">';
+	texto = texto + '<input name="productos_matriz[]" id="productos_matriz[]" type="hidden" value="'+producto_temp_id+'">';
 	texto = texto + '<input name="productos_matriz_n[]" id="productos_matriz_n[]" type="hidden" value="'+producto_temp_n+'">';
 	texto = texto + '<div class="ui-grid-b">';
-	texto = texto + '<div class="ui-block-a" style="text-align:left; width:60%;">';
+	texto = texto + '<div class="ui-block-a" style="text-align:left; width:50%;">';
 	texto = texto + productos_nombre[producto_temp_id];
+	texto = texto + ' - <a href="#" onClick="eliminar_producto('+id+')">Eliminar</a>';
 	texto = texto + '</div>';
-	texto = texto + '<div class="ui-block-b" style="text-align:right; width:20%;">';
+	texto = texto + '<div class="ui-block-b" style="text-align:center; width:20%;">';
 	texto = texto + document.getElementById('producto_nuevo_n').value;
 	texto = texto + '</div>';
-	texto = texto + '<div class="ui-block-c" style="text-align:right; width:20%;">';
-	texto = texto + productos_precio[producto_temp_id]*document.getElementById('producto_nuevo_n').value;
+	texto = texto + '<div class="ui-block-c" style="text-align:right; width:30%;">';
+	texto = texto + FormatoDinero(productos_precio[producto_temp_id]*document.getElementById('producto_nuevo_n').value);
 	texto = texto + '</div>';
 	texto = texto + '</div>';
 	//texto = texto + '<p>'+productos_lista[producto_temp_id]['nombre']+' (' + document.getElementById('producto_nuevo_n').value + ')</p>';
 	texto = texto + '<hr>';
+	texto = texto + '</div>';
+	suma_total();
 	$('#lista_productos').append(texto);
 }
 var productos_nombre = {};
@@ -215,7 +246,9 @@ $("#nuevo_producto").live('pagebeforeshow', function() {
 }); */
 var producto_temp_id = 0;
 var producto_temp_n = 0;
-
+function FormatoDinero(x) {
+    return '$' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 
 </script>
 <meta charset="UTF-8">
@@ -413,22 +446,22 @@ html, body {
   <div data-role="content">
     <h2>Productos</h2>
     <div class="ui-grid-b">
-      <div style="text-align:left; width:60%; font-weight:bold;" class="ui-block-a">Detalle</div>
-      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-b">Cant.</div>
-      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-c">Precio</div>
+      <div style="text-align:left; width:50%; font-weight:bold;" class="ui-block-a">Detalle</div>
+      <div style="text-align:center; width:20%; font-weight:bold;" class="ui-block-b">Cant.</div>
+      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c">Precio</div>
     </div>
     <hr>
     <div id="lista_productos"></div>
     <div class="ui-grid-b">
-      <div style="text-align:left; width:60%;" class="ui-block-a">Despacho</div>
+      <div style="text-align:left; width:50%;" class="ui-block-a">Despacho</div>
       <div style="text-align:right; width:20%;" class="ui-block-b">&nbsp;</div>
-      <div style="text-align:right; width:20%;" class="ui-block-c"><div id="valor_despacho"></div></div>
+      <div style="text-align:right; width:30%;" class="ui-block-c"><div id="valor_despacho"></div></div>
     </div>
     <hr>
     <div class="ui-grid-b">
-      <div style="text-align:left; width:60%; font-weight:bold;" class="ui-block-a">&nbsp;</div>
-      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-b">Total</div>
-      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-c"><div id="valor_total"></div></div>
+      <div style="text-align:left; width:50%; font-weight:bold;" class="ui-block-a">&nbsp;</div>
+      <div style="text-align:right; width:20%; font-weight:bold; padding-right:5px;" class="ui-block-b">Total</div>
+      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c"><div id="valor_total"></div></div>
     </div>
     <hr>
     <div class="ui-grid-a">
