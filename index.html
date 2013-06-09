@@ -6,6 +6,7 @@
 <script type="text/javascript" charset="utf-8" src="jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://aloocopete.cl/comandas/productos.js.php"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" charset="utf-8">
 var url_master = 'http://www.aloocopete.cl/comandas/';	
@@ -30,9 +31,9 @@ function alertDismissed() {
 // onError Callback receives a PositionError object
 //
 function onError(error) {
-	var msg = 'No se ha podido obtener la ubicación.';
+	var texto = 'No se ha podido obtener la ubicación.';
 	navigator.notification.alert(
-					msg,  // message
+					texto,  // message
 					alertDismissed,         // callback
 					'Aloo Copete',            // title
 					'OK'                  // buttonName
@@ -119,6 +120,14 @@ function initialize(lat,lon) {
 			map: map
 	});
 }
+function msg(texto){
+	navigator.notification.alert(
+			texto,  // message
+			alertDismissed,         // callback
+			'Aloo Copete',            // title
+			'Listo!'                  // buttonName
+	);
+}
 function mostrar(){
 	var lat = document.getElementById('lat').value;
 	var lon = document.getElementById('lon').value;
@@ -133,35 +142,53 @@ function mostrar(){
 		async: true,
 		success: function (result) {
 			var nombre = result['nombre'];
-			var msg = 'Sector: ' + nombre;
-			navigator.notification.alert(
-					msg,  // message
-					alertDismissed,         // callback
-					'Aloo Copete',            // title
-					'Listo!'                  // buttonName
-			);
+			var texto = 'Sector: ' + nombre;
+			msg(texto);
 			$.mobile.changePage("#pagina03");
 		},
 		error: function (request,error) {
-			var msg = 'Error conectando con el servidor!';
-			navigator.notification.alert(
-					msg,  // message
-					alertDismissed,         // callback
-					'Aloo Copete',            // title
-					'OK'                  // buttonName
-			);
+			var texto = 'Error conectando con el servidor!';
+			msg(texto);
 		}
 	});
 }
 function nuevo_producto(){
 	// agrega nuevo producto.
+	producto_temp_id = document.getElementById('producto_nuevo_id').value;
+	producto_temp_n = document.getElementById('producto_nuevo_n').value;
 	$('.ui-dialog').dialog('close');
-	$('#lista_productos').append('<p>Test: ' + document.getElementById('producto_nuevo_n').value + '</p>');
+	texto = '<input name="productos_matriz[]" id="productos_matriz[]" type="hidden" value="'+producto_temp_id+'">';
+	texto = texto + '<input name="productos_matriz_n[]" id="productos_matriz_n[]" type="hidden" value="'+producto_temp_n+'">';
+	texto = texto + '<div class="ui-grid-b">';
+	texto = texto + '<div class="ui-block-a" style="text-align:left; width:60%;">';
+	texto = texto + productos_lista[producto_temp_id]['nombre'];
+	texto = texto + '</div>';
+	texto = texto + '<div class="ui-block-b" style="text-align:right; width:20%;">';
+	texto = texto + document.getElementById('producto_nuevo_n').value;
+	texto = texto + '</div>';
+	texto = texto + '<div class="ui-block-c" style="text-align:right; width:20%;">';
+	texto = texto + productos_lista[producto_temp_id]['precio']*document.getElementById('producto_nuevo_n').value;
+	texto = texto + '</div>';
+	texto = texto + '</div>';
+	//texto = texto + '<p>'+productos_lista[producto_temp_id]['nombre']+' (' + document.getElementById('producto_nuevo_n').value + ')</p>';
+	texto = texto + '<hr>';
+	$('#lista_productos').append(texto);
 }
 $("#nuevo_producto").live('pagebeforeshow', function() {
 	$('#producto_nuevo_id').prop('selectedIndex',2);
 	document.getElementById('producto_nuevo_n').value = '';
+	
+	
+		
+	$.each(productos_lista, function(key, value) {
+		var tex = '<option value="'+key+'">'+productos_lista[key]['nombre']+'</option>';
+		$('#producto_nuevo_id').append(tex);
+	});
 });
+var producto_temp_id = 0;
+var producto_temp_n = 0;
+
+
 </script>
 <meta charset="UTF-8">
 <style type="text/css">
@@ -357,13 +384,31 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Productos</h2>
+    <div class="ui-grid-b">
+      <div style="text-align:left; width:60%; font-weight:bold;" class="ui-block-a">Detalle</div>
+      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-b">Cant.</div>
+      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-c">Precio</div>
+    </div>
+    <hr>
     <div id="lista_productos"></div>
+    <div class="ui-grid-b">
+      <div style="text-align:left; width:60%;" class="ui-block-a">Despacho</div>
+      <div style="text-align:right; width:20%;" class="ui-block-b">&nbsp;</div>
+      <div style="text-align:right; width:20%;" class="ui-block-c"><div id="valor_despacho"></div></div>
+    </div>
+    <hr>
+    <div class="ui-grid-b">
+      <div style="text-align:left; width:60%; font-weight:bold;" class="ui-block-a">&nbsp;</div>
+      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-b">Total</div>
+      <div style="text-align:right; width:20%; font-weight:bold;" class="ui-block-c"><div id="valor_total"></div></div>
+    </div>
     <hr>
     <div class="ui-grid-a">
       <div class="ui-block-a"><a href="#nuevo_producto" data-rel="dialog" data-role="button" data-theme="b">+ Producto</a></div>
         <div class="ui-block-b">&nbsp;</div>
       </div>
 		<input type="button" onClick="window.location='#pagina06';" value="Siguiente" data-theme="b">
+    <input name="" type="submit" value="Enviar" data-theme="b">
   </div>
   <!-- /content -->
 </div>
@@ -378,41 +423,8 @@ html, body {
     <div data-role="fieldcontain">
       <label for="producto_nuevo_id">Producto:</label>
       <select name="producto_nuevo_id" id="producto_nuevo_id">
-        <option value="">Seleccione</option>
-        <option value="1">BEBIDAS: COCA COLA 1.5 DESECHABLE1 </option>
-        <option value="2">BEBIDAS: COCA COLA LIGHT 1.5 2 </option>
-        <option value="3">BEBIDAS: COCA COLA ZERO 1.53 </option>
-        <option value="4">BEBIDAS: NORDIC GINGER ALE 1.5 4 </option>
-        <option value="5">BEBIDAS: SPRITE 1.55 </option>
-        <option value="6">BEBIDAS: TONICA NORDIC 1.5 6 </option>
-        <option value="7">CERVEZA: BECKER 1LT DESECHABLE 7 </option>
-        <option value="8">CERVEZA: CORONA SIX PACK BOTELLA 8 </option>
-        <option value="9">CERVEZA: ESCUDO SIX PACK LATA CHICA9 </option>
-        <option value="10">CERVEZA: ESCUDO SIX PACK LATA MEDIO10</option>
-        <option value="11">CERVEZA: HEINEKEN SIX PACK LATA11</option>
-        <option value="12">CERVEZA: HEINEKENT 1LT DESECHABLE12</option>
-        <option value="13">CHAMPAGNE: VALDIVIESO BRUT 750ML 13</option>
-        <option value="14">CIGARRO: LUCKY CLIC 20 14</option>
-        <option value="15">ENERGETICA: RED BULL 250ML15</option>
-        <option value="16">HIELO: HIELO 1 KG16</option>
-        <option value="17">JUGO: ANDINA NARANJA17</option>
-        <option value="18">PISCO: ALTO DEL CARMEN 3518</option>
-        <option value="19">PISCO: CAPEL 3519</option>
-        <option value="20">PISCO: MISTRAL 3520</option>
-        <option value="21">RON: DOMINICAM 750 21</option>
-        <option value="22">RON: FLOR DE CAÑA 75022</option>
-        <option value="23">RON: HAVANA 1LT23</option>
-        <option value="24">RON: PAMPERO 750 24</option>
-        <option value="25">TEQUILA: SOMBRERO NEGRO25</option>
-        <option value="26">VINO: MISIONES DE RENGO CHARDONNAY26</option>
-        <option value="27">VINO: MISIONES DE RENGO RESERVA CABERNET SAUVIGNON27</option>
-        <option value="28">VINO: MISIONES DE RENGO SAUVIGNON BLANC 28</option>
-        <option value="29">VINO: MISIONES DE RENGO VARIETAL CABERNET SAUVIGNON 29</option>
-        <option value="30">VODKA: ABSOLUT 750 30</option>
-        <option value="31">VODKA: PL 75031</option>
-        <option value="32">VODKA: STOLICHNAYA 1LT 32</option>
-        <option value="33">WHISKY: JACK DANIELS 75033</option>
-        <option value="34">WHISKY: JOHNNIE WALKER RED LABEL 75034</option>
+        <option value="">Seleccione...</option>
+        
       </select>
     </div>
 
