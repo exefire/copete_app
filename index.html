@@ -6,7 +6,6 @@
 <script type="text/javascript" charset="utf-8" src="jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://aloocopete.cl/comandas/productos.js.php"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" charset="utf-8">
 var url_master = 'http://www.aloocopete.cl/comandas/';	
@@ -28,23 +27,16 @@ function onDeviceReady() {
 function alertDismissed() {
     // hacer algo
 }
-// onError Callback receives a PositionError object
-//
-function onError(error) {
+function ErrorUbicacion(error) {
 	var texto = 'No se ha podido obtener la ubicación.';
-	navigator.notification.alert(
-					texto,  // message
-					alertDismissed,         // callback
-					'Aloo Copete',            // title
-					'OK'                  // buttonName
-			);
+	msg(texto);
 }
 function getCurrentPosition() {
-	navigator.geolocation.getCurrentPosition(onSuccess, onError);    
+	navigator.geolocation.getCurrentPosition(onSuccess, ErrorUbicacion);    
 }
 function watchPosition() {
 	var options = { frequency: 1000 };
-	watchID = navigator.geolocation.watchPosition(posicion_ok, onError, options);
+	watchID = navigator.geolocation.watchPosition(posicion_ok, ErrorUbicacion, options);
 }
 function inicia_posicion(){
 	// Cambia de página
@@ -121,12 +113,13 @@ function initialize(lat,lon) {
 	});
 }
 function msg(texto){
-	navigator.notification.alert(
-			texto,  // message
-			alertDismissed,         // callback
-			'Aloo Copete',            // title
-			'Listo!'                  // buttonName
-	);
+	alert(texto);
+	/* navigator.notification.alert(
+			texto,  				// message
+			alertDismissed, // callback
+			'Aloo Copete',  // title
+			'Listo!'        // buttonName
+	); */
 }
 function mostrar(){
 	var lat = document.getElementById('lat').value;
@@ -161,30 +154,65 @@ function nuevo_producto(){
 	texto = texto + '<input name="productos_matriz_n[]" id="productos_matriz_n[]" type="hidden" value="'+producto_temp_n+'">';
 	texto = texto + '<div class="ui-grid-b">';
 	texto = texto + '<div class="ui-block-a" style="text-align:left; width:60%;">';
-	texto = texto + productos_lista[producto_temp_id]['nombre'];
+	texto = texto + productos_nombre[producto_temp_id];
 	texto = texto + '</div>';
 	texto = texto + '<div class="ui-block-b" style="text-align:right; width:20%;">';
 	texto = texto + document.getElementById('producto_nuevo_n').value;
 	texto = texto + '</div>';
 	texto = texto + '<div class="ui-block-c" style="text-align:right; width:20%;">';
-	texto = texto + productos_lista[producto_temp_id]['precio']*document.getElementById('producto_nuevo_n').value;
+	texto = texto + productos_precio[producto_temp_id]*document.getElementById('producto_nuevo_n').value;
 	texto = texto + '</div>';
 	texto = texto + '</div>';
 	//texto = texto + '<p>'+productos_lista[producto_temp_id]['nombre']+' (' + document.getElementById('producto_nuevo_n').value + ')</p>';
 	texto = texto + '<hr>';
 	$('#lista_productos').append(texto);
 }
+var productos_nombre = {};
+var productos_precio = {};
+$("#pagina05").live('pageinit', function() {
+	// Cuando aparece la pantalla de producto
+	url = url_master + "productos.json.php";
+	$.ajax({
+		url: url,
+		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
+		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		dataType: "jsonp",
+		async: true,
+		success: function (result) {
+			/* 
+			console.log(result[i]['id_producto']);
+			console.log(result[i]['id_categoria']);
+			console.log(result[i]['nombre']);
+			console.log(result[i]['nombre_categoria']);
+			console.log(result[i]['precio']); 
+			*/					
+			// Cargando al select
+			$.each(result, function(key, value) {
+				var tex = '<option value="'+result[key]['id_producto']+'">'+result[key]['nombre_categoria']+': '+result[key]['nombre']+'</option>';
+				$('#producto_nuevo_id').append(tex);
+				productos_nombre[result[key]['id_producto']] = result[key]['nombre'];
+				productos_precio[result[key]['id_producto']] = result[key]['precio'];
+			});
+		},
+		error: function (request,error) {
+			$.mobile.changePage("#pagina04");
+			var texto = 'Error conectando con el servidor!';
+			msg(texto);
+		}
+	});
+});
 $("#nuevo_producto").live('pagebeforeshow', function() {
+	// Cuando aparece la pantalla de agregar nuevo producto al pedido
 	$('#producto_nuevo_id').prop('selectedIndex',2);
 	document.getElementById('producto_nuevo_n').value = '';
-	
-	
-		
+});
+/* $("#nuevo_producto").live('pageinit', function() {
+	// Cuando aparece la pantalla por primera vez
 	$.each(productos_lista, function(key, value) {
 		var tex = '<option value="'+key+'">'+productos_lista[key]['nombre']+'</option>';
 		$('#producto_nuevo_id').append(tex);
 	});
-});
+}); */
 var producto_temp_id = 0;
 var producto_temp_n = 0;
 
