@@ -280,7 +280,8 @@ function ultimo_paso(){
 function confirmar(){
 	// Pregunta
 	if(typeof(navigator.notification)=='undefined'){
-		confirma_si();
+		var buttonIndex;
+		confirma_si(buttonIndex);
 	}else{
 		navigator.notification.confirm(
 				'Está a punto de hacer el pedido. \n ¿Está todo OK? ',  // message
@@ -290,7 +291,7 @@ function confirmar(){
 		);
 	}
 }
-function confirma_si(){
+function confirma_si(buttonIndex){
 	// envia información
 	url = "http://www.exefire.com/log/?";
 	url = url + 'lat=' + document.getElementById('lat').value + '&';
@@ -326,6 +327,8 @@ function confirma_si(){
 		success: function (result) {
 			// Cargando al select
 			msg(result['respuesta']);
+			// muestra siguiente pagina
+			$.mobile.changePage("#pagina07");
 		},
 		error: function (request,error) {
 			$.mobile.changePage("#pagina06");
@@ -333,8 +336,6 @@ function confirma_si(){
 			msg(texto);
 		}
 	});
-	// muestra siguiente pagina
-	$.mobile.changePage("#pagina07");
 }
 
 </script>
