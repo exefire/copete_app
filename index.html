@@ -279,17 +279,12 @@ function ultimo_paso(){
 
 function confirmar(){
 	// Pregunta
-	if(typeof(navigator.notification)=='undefined'){
-		var buttonIndex;
-		confirma_si(buttonIndex);
-	}else{
-		navigator.notification.confirm(
-				'Está a punto de hacer el pedido. \n ¿Está todo OK? ',  // message
-				confirma_si,              // callback to invoke with index of button pressed
-				'Confirmar Pedido',            // title
-				'Cancelar,OK'          // buttonLabels
-		);
-	}
+	navigator.notification.confirm(
+			'Está a punto de hacer el pedido. \n ¿Está todo OK? ',  // message
+			confirma_si,              // callback to invoke with index of button pressed
+			'Confirmar Pedido',            // title
+			'Cancelar,OK'          // buttonLabels
+	);
 }
 function confirma_si(buttonIndex){
 	// envia información
