@@ -113,13 +113,16 @@ function initialize(lat,lon) {
 	});
 }
 function msg(texto){
-	//alert(texto);
-	 navigator.notification.alert(
-			texto,  				// message
-			alertDismissed, // callback
-			'Aloo Copete',  // title
-			'Listo!'        // buttonName
-	); 
+	if(typeof(navigator.notification)=='undefined'){
+		alert(texto);
+	}else{
+		navigator.notification.alert(
+				texto,  				// message
+				alertDismissed, // callback
+				'Aloo Copete',  // title
+				'Listo!'        // buttonName
+		);
+	}
 }
 var precio_despacho = 0;
 function mostrar(){
