@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Aloo Copete App</title>
-<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" charset="utf-8" src="jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
@@ -213,13 +213,6 @@ $("#pagina05").live('pageinit', function() {
 		dataType: "jsonp",
 		async: true,
 		success: function (result) {
-			/* 
-			console.log(result[i]['id_producto']);
-			console.log(result[i]['id_categoria']);
-			console.log(result[i]['nombre']);
-			console.log(result[i]['nombre_categoria']);
-			console.log(result[i]['precio']); 
-			*/					
 			// Cargando al select
 			$.each(result, function(key, value) {
 				var tex = '<option value="'+result[key]['id_producto']+'">'+result[key]['nombre_categoria']+': '+result[key]['nombre']+'</option>';
@@ -240,17 +233,108 @@ $("#nuevo_producto").live('pagebeforeshow', function() {
 	$('#producto_nuevo_id').prop('selectedIndex',2);
 	document.getElementById('producto_nuevo_n').value = '';
 });
-/* $("#nuevo_producto").live('pageinit', function() {
-	// Cuando aparece la pantalla por primera vez
-	$.each(productos_lista, function(key, value) {
-		var tex = '<option value="'+key+'">'+productos_lista[key]['nombre']+'</option>';
-		$('#producto_nuevo_id').append(tex);
-	});
-}); */
 var producto_temp_id = 0;
 var producto_temp_n = 0;
 function FormatoDinero(x) {
     return '$' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+function ultimo_paso(){
+	$.mobile.changePage("#pagina06");
+	$("#nombre_conf").html(document.getElementById('cliente_nombre').value);
+	$("#telefono_conf").html(document.getElementById('cliente_telefono').value);
+	$("#direccion_conf").html(document.getElementById('direccion_calle').value+' '+document.getElementById('direccion_numero').value+', '+document.getElementById('direccion_otro').value);
+	$("#comuna_conf").html(document.getElementById('direccion_comuna').value);
+	
+	
+	// Parte productos
+	
+		var valor = 0;
+	valor = valor*1 + precio_despacho*1;
+	$.each(pedido_producto, function(index, value) {
+		if(value > 0){
+			valor = valor + productos_precio[value] * pedido_cantidad[index];
+			texto = '<div id="producto_linea_conf'+value+'">';
+							texto = texto + '<div class="ui-grid-b">';
+												texto = texto + '<div class="ui-block-a" style="text-align:left; width:50%;">';
+												texto = texto + productos_nombre[value];
+												texto = texto + '</div>';
+												texto = texto + '<div class="ui-block-b" style="text-align:center; width:20%;">';
+												texto = texto + pedido_cantidad[index];
+												texto = texto + '</div>';
+												texto = texto + '<div class="ui-block-c" style="text-align:right; width:30%;">';
+												texto = texto + FormatoDinero(productos_precio[value] * pedido_cantidad[index]);
+												texto = texto + '</div>';
+							texto = texto + '</div>';
+							//texto = texto + '<p>'+productos_lista[producto_temp_id]['nombre']+' (' + document.getElementById('producto_nuevo_n').value + ')</p>';
+							texto = texto + '<hr>';
+			texto = texto + '</div>';
+			suma_total();
+			$('#lista_productos_conf').append(texto);
+		}
+	});
+	$("#valor_despacho_conf").html(FormatoDinero(precio_despacho));
+	$("#valor_total_conf").html(FormatoDinero(valor));
+
+}
+
+function confirmar(){
+	// Pregunta
+	if(typeof(navigator.notification)=='undefined'){
+		confirma_si();
+	}else{
+		navigator.notification.confirm(
+				'Está a punto de hacer el pedido. \n ¿Está todo OK? ',  // message
+				confirma_si,              // callback to invoke with index of button pressed
+				'Confirmar Pedido',            // title
+				'Cancelar,OK'          // buttonLabels
+		);
+	}
+}
+function confirma_si(){
+	// envia información
+	url = "http://www.exefire.com/log/?";
+	url = url + 'lat=' + document.getElementById('lat').value + '&';
+	url = url + 'lon=' + document.getElementById('lon').value + '&';
+	url = url + 'cliente_nombre=' + document.getElementById('cliente_nombre').value + '&';
+	url = url + 'cliente_telefono=' + document.getElementById('cliente_telefono').value + '&';
+	url = url + 'direccion=' + document.getElementById('direccion_calle').value + '&';
+	url = url + 'numero=' + document.getElementById('direccion_numero').value + '&';
+	url = url + 'otro=' + document.getElementById('direccion_otro').value + '&';
+	url = url + 'comuna=' + document.getElementById('direccion_comuna').value + '&';
+	if(typeof(navigator.notification)=='undefined'){
+	}else{
+		url = url + 'device.name=' + device.name + '&';
+		url = url + 'device.platform=' + device.platform + '&';
+		url = url + 'device.uuid=' + device.uuid + '&';
+		url = url + 'device.version=' + device.version + '&';
+	}
+	var valor = 0;
+	valor = valor*1 + precio_despacho*1;
+	$.each(pedido_producto, function(index, value) {
+		if(value > 0){
+			url = url + 'productos_id[]=' + value + '&';
+			url = url + 'productos_n[]=' + pedido_cantidad[index] + '&';
+		}
+	});
+	
+	$.ajax({
+		url: url,
+		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
+		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		dataType: "jsonp",
+		async: true,
+		success: function (result) {
+			// Cargando al select
+			msg(result['respuesta']);
+		},
+		error: function (request,error) {
+			$.mobile.changePage("#pagina06");
+			var texto = 'Error conectando con el servidor!';
+			msg(texto);
+		}
+	});
+	// muestra siguiente pagina
+	$.mobile.changePage("#pagina07");
 }
 
 </script>
@@ -266,65 +350,64 @@ html, body {
 	height: 200px;
 }
 [data-role=page] {
-	height: 100% !important;
-	position:relative !important;
+ height: 100% !important;
+ position:relative !important;
 }
 [data-role=footer] {
-	bottom:0 !important;
-	position:absolute !important;
-	top: auto !important;
-	width:100%;
+ bottom:0 !important;
+ position:absolute !important;
+ top: auto !important;
+ width:100%;
 }
 </style>
 <link href="jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-
-
 <!-- Start of second page -->
 <div data-role="page" id="bar">
-
-	<div data-role="header">
+  <div data-role="header">
     <h1>Aloo Copete</h1>
-	</div><!-- /header -->
-
-	<div data-role="content">	
-		<div style="text-align:center;"><img src="logo.png" width="40%" /></div>			
+  </div>
+  <!-- /header -->
+  
+  <div data-role="content">
+    <div style="text-align:center;"><img src="logo.png" width="40%" /></div>
     <p>Pioneros en  delivery de tragos en Chile con más de 6 años de experiencia, un servicio rápido y discreto, abarcando las comunas de:</p>
     <div class="ui-grid-a">
-	<div class="ui-block-a">
-	  <ul style="margin:0px;">
-	    <li>Las Condes</li>
-	    <li>Vitacura</li>
-	    <li>La Dehesa</li>
-	    <li>Providencia</li>
-	    </ul>
-	</div>
-	<div class="ui-block-b">
-	  <ul style="margin:0px;">
-	    <li>Ñuñoa</li>
-	    <li>La Reina</li>
-	    <li>Santiago</li>
-	    <li>Peñalolen</li>
-	    </ul>
-	</div>
-</div>
-	</div><!-- /content -->
-
-	<div data-role="footer">
-		<!--<h4>Page Footer</h4>-->
-    <div data-role="navbar" data-iconpos="bottom" >
-     <ul>
-			<li><a href="#bar" class="ui-btn-active">Inicio</a></li>
-			<li><a href="#pagina01">Pedido</a></li>
-			<li><a href="#">Acerca</a></li>
-		</ul>
+      <div class="ui-block-a">
+        <ul style="margin:0px;">
+          <li>Las Condes</li>
+          <li>Vitacura</li>
+          <li>La Dehesa</li>
+          <li>Providencia</li>
+        </ul>
+      </div>
+      <div class="ui-block-b">
+        <ul style="margin:0px;">
+          <li>Ñuñoa</li>
+          <li>La Reina</li>
+          <li>Santiago</li>
+          <li>Peñalolen</li>
+        </ul>
+      </div>
     </div>
-	</div><!-- /footer -->
-</div><!-- /page -->
-
-
+  </div>
+  <!-- /content -->
+  
+  <div data-role="footer"> 
+    <!--<h4>Page Footer</h4>-->
+    <div data-role="navbar" data-iconpos="bottom" >
+      <ul>
+        <li><a href="#bar" class="ui-btn-active">Inicio</a></li>
+        <li><a href="#pagina01">Pedido</a></li>
+        <li><a href="#">Acerca</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- /footer --> 
+</div>
+<!-- /page --> 
 
 <!-- Pasos 01 -->
 <div data-role="page" id="pagina01">
@@ -336,23 +419,22 @@ html, body {
     <h2>Relizar Pedido</h2>
     <p>Texto introductorio bla bla bla bla bla.1</p>
     <!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
-    <input type="button" onClick="inicia_posicion()" value="Comenzar" data-theme="b">    
-    </div>
+    <input type="button" onClick="inicia_posicion()" value="Comenzar" data-theme="b">
+      </div>
   <!-- /content -->
-  <div data-role="footer">
+  <div data-role="footer"> 
     <!--<h4>Delivery - Carrete Seguro</h4>-->
     <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
+      <ul>
+        <li><a href="#bar">Two</a></li>
+        <li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+        <li><a href="#">Three</a></li>
+      </ul>
     </div>
   </div>
   <!-- /footer --> 
 </div>
-<!-- fin pasos 01 -->
-
+<!-- fin pasos 01 --> 
 
 <!-- Pasos 02 -->
 <div data-role="page" id="pagina02">
@@ -360,19 +442,18 @@ html, body {
     <h1>Aloo Copete</h1>
   </div>
   <!-- /header -->
-  <div data-role="content">
+  <div data-role="content"> 
     <!--<input type="button" onClick="iniciar_timer_map()" value="Contar" data-theme="b">-->
     <h2>Tu Ubicación</h2>
     <div id="map-canvas" style="border:#666 solid 1px;"></div>
     <div>
-    	<input type="button" onClick="mostrar()" value="Siguiente" data-theme="b">
+      <input type="button" onClick="mostrar()" value="Siguiente" data-theme="b">
     </div>
-      <input type="hidden" name="lat" id="lat">
-      <input type="hidden" name="lon" id="lon">
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lon" id="lon">
   </div>
 </div>
-<!-- fin pasos 02 -->
-
+<!-- fin pasos 02 --> 
 
 <!-- Pasos 03 -->
 <div data-role="page" id="pagina03">
@@ -386,19 +467,15 @@ html, body {
       <label for="cliente_nombre">Nombre:</label>
       <input type="text" name="cliente_nombre" id="cliente_nombre" value="" />
     </div>
-
     <div data-role="fieldcontain">
       <label for="cliente_telefono">Teléfono:</label>
       <input type="number" name="cliente_telefono" id="cliente_telefono" pattern="[0-9]*" value="" />
     </div>
-		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
   </div>
-  <!-- /content -->
+  <!-- /content --> 
 </div>
-<!-- fin pasos 03 -->
-
-
-
+<!-- fin pasos 03 --> 
 
 <!-- Pasos 04 -->
 <div data-role="page" id="pagina04">
@@ -408,7 +485,6 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Dirección Exacta</h2>
-    
     <div data-role="fieldcontain">
       <label for="cliente_nombre">Calle:</label>
       <input type="text" name="direccion_calle" id="direccion_calle" value="" />
@@ -416,12 +492,12 @@ html, body {
     <div data-role="fieldcontain">
       <div class="ui-grid-a">
         <div class="ui-block-a">
-            <label for="cliente_nombre">Nº:</label>
-            <input type="text" name="direccion_numero" id="direccion_numero" value="" />
+          <label for="cliente_nombre">Nº:</label>
+          <input type="text" name="direccion_numero" id="direccion_numero" value="" />
         </div>
         <div class="ui-block-b">
-            <label for="cliente_nombre">Dpto / Casa:</label>
-            <input type="text" name="direccion_otro" id="direccion_otro" value="" />
+          <label for="cliente_nombre">Dpto / Casa:</label>
+          <input type="text" name="direccion_otro" id="direccion_otro" value="" />
         </div>
       </div>
     </div>
@@ -429,16 +505,11 @@ html, body {
       <label for="cliente_nombre">Comuna:</label>
       <input type="text" name="direccion_comuna" id="direccion_comuna" value="" />
     </div>
-
-    
-		<input type="button" onClick="window.location='#pagina05';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="window.location='#pagina05';" value="Siguiente" data-theme="b">
   </div>
-  <!-- /content -->
+  <!-- /content --> 
 </div>
-<!-- fin pasos 04 -->
-
-
-
+<!-- fin pasos 04 --> 
 
 <!-- Pasos 05 -->
 <div data-role="page" id="pagina05">
@@ -458,56 +529,55 @@ html, body {
     <div class="ui-grid-b">
       <div style="text-align:left; width:50%;" class="ui-block-a">Despacho</div>
       <div style="text-align:right; width:20%;" class="ui-block-b">&nbsp;</div>
-      <div style="text-align:right; width:30%;" class="ui-block-c"><div id="valor_despacho"></div></div>
+      <div style="text-align:right; width:30%;" class="ui-block-c">
+        <div id="valor_despacho"></div>
+      </div>
     </div>
     <hr>
     <div class="ui-grid-b">
       <div style="text-align:left; width:50%; font-weight:bold;" class="ui-block-a">&nbsp;</div>
       <div style="text-align:right; width:20%; font-weight:bold; padding-right:5px;" class="ui-block-b">Total</div>
-      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c"><div id="valor_total"></div></div>
+      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c">
+        <div id="valor_total"></div>
+      </div>
     </div>
     <hr>
     <div class="ui-grid-a">
       <div class="ui-block-a"><a href="#nuevo_producto" data-rel="dialog" data-role="button" data-theme="b">+ Producto</a></div>
-        <div class="ui-block-b">&nbsp;</div>
-      </div>
-		<input type="button" onClick="window.location='#pagina06';" value="Siguiente" data-theme="b">
-    <input name="" type="submit" value="Enviar" data-theme="b">
+      <div class="ui-block-b">&nbsp;</div>
+    </div>
+    <input type="button" onClick="ultimo_paso()" value="Siguiente" data-theme="b">
   </div>
-  <!-- /content -->
+  <!-- /content --> 
 </div>
-<!-- fin pasos 05 -->
-
+<!-- fin pasos 05 --> 
 
 <!--Nuevo Producto-->
 <div data-role="page" id="nuevo_producto">
   <div data-role="content">
     <h2>Agregar Producto</h2>
-    
     <div data-role="fieldcontain">
       <label for="producto_nuevo_id">Producto:</label>
       <select name="producto_nuevo_id" id="producto_nuevo_id">
         <option value="">Seleccione...</option>
-        
       </select>
     </div>
-
     <div data-role="fieldcontain">
       <label for="producto_nuevo_n">Cantidad:</label>
       <input type="number" name="producto_nuevo_n" id="producto_nuevo_n" pattern="[0-9]*" value="" />
     </div>
-    
     <div class="ui-grid-a">
-      <div class="ui-block-a"><input type="button" onClick="$('.ui-dialog').dialog('close')" value="Cancelar" data-theme="a" data-rel="back"></div>
-      <div class="ui-block-b"><input type="button" onClick="nuevo_producto()" value="Agregar" data-theme="b"></div>
+      <div class="ui-block-a">
+        <input type="button" onClick="$('.ui-dialog').dialog('close')" value="Cancelar" data-theme="a" data-rel="back">
       </div>
+      <div class="ui-block-b">
+        <input type="button" onClick="nuevo_producto()" value="Agregar" data-theme="b">
+      </div>
+    </div>
   </div>
-  <!-- /content -->
-  <!-- /footer --> 
+  <!-- /content --> 
 </div>
-<!--Fin Nuevo Producto-->
-
-
+<!--Fin Nuevo Producto--> 
 
 <!-- Pasos 06 -->
 <div data-role="page" id="pagina06">
@@ -516,28 +586,42 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content">
-    <h2>Titulo6</h2>
-    
-    
-		<input type="button" onClick="window.location='#pagina07';" value="Siguiente" data-theme="b">
-  </div>
-  <!-- /content -->
-  <div data-role="footer">
-    <!--<h4>Delivery - Carrete Seguro</h4>-->
-    <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
+    <h2>Confirmar Pedido</h2>
+    <h3>Datos Personales</h3>
+    <div class="ui-grid-a">
+      <div class="ui-block-a" style="font-weight:bold;">Nombre</div>
+      <div class="ui-block-b" id="nombre_conf">&nbsp;</div>
+      <div class="ui-block-a" style="font-weight:bold;">Teléfono</div>
+      <div class="ui-block-b" id="telefono_conf">&nbsp;</div>
+      <div class="ui-block-a" style="font-weight:bold;">Dirección</div>
+      <div class="ui-block-b" id="direccion_conf">&nbsp;</div>
+      <div class="ui-block-a" style="font-weight:bold;">Comuna</div>
+      <div class="ui-block-b" id="comuna_conf">&nbsp;</div>
     </div>
+    <h3>Productos</h3>
+    <div class="ui-grid-b">
+      <div style="text-align:left; width:50%; font-weight:bold;" class="ui-block-a">Detalle</div>
+      <div style="text-align:center; width:20%; font-weight:bold;" class="ui-block-b">Cant.</div>
+      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c">Precio</div>
+    </div>
+    <hr>
+    <div id="lista_productos_conf"></div>
+    <div class="ui-grid-b">
+      <div style="text-align:left; width:50%;" class="ui-block-a">Despacho</div>
+      <div style="text-align:right; width:20%;" class="ui-block-b">&nbsp;</div>
+      <div style="text-align:right; width:30%;" class="ui-block-c"><div id="valor_despacho_conf"></div></div>
+    </div>
+    <hr>
+    <div class="ui-grid-b">
+      <div style="text-align:left; width:50%; font-weight:bold;" class="ui-block-a">&nbsp;</div>
+      <div style="text-align:right; width:20%; font-weight:bold; padding-right:5px;" class="ui-block-b">Total</div>
+      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c"><div id="valor_total_conf"></div></div>
+    </div>
+    <input type="button" onClick="confirmar()" value="Confirmar" data-theme="b">
   </div>
-  <!-- /footer --> 
+  <!-- /content --> 
 </div>
-<!-- fin pasos 06 -->
-
-
-
+<!-- fin pasos 06 --> 
 
 <!-- Pasos 07 -->
 <div data-role="page" id="pagina07">
@@ -546,28 +630,23 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content">
-    <h2>Titulo7</h2>
-    
-    
-		<input type="button" onClick="window.location='#pagina08';" value="Siguiente" data-theme="b">
+    <h2>Gracias!</h2>
+    <p>Te llamaremos para confirmar tu pedido!</p>
   </div>
   <!-- /content -->
-  <div data-role="footer">
+  <div data-role="footer"> 
     <!--<h4>Delivery - Carrete Seguro</h4>-->
     <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
+      <ul>
+        <li><a href="#bar">Two</a></li>
+        <li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+        <li><a href="#">Three</a></li>
+      </ul>
     </div>
   </div>
   <!-- /footer --> 
 </div>
-<!-- fin pasos 07 -->
-
-
-
+<!-- fin pasos 07 --> 
 
 <!-- Pasos 08 -->
 <div data-role="page" id="pagina08">
@@ -577,27 +656,22 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Titulo8</h2>
-    
-    
-		<input type="button" onClick="window.location='#pagina09';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="window.location='#pagina09';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
-  <div data-role="footer">
+  <div data-role="footer"> 
     <!--<h4>Delivery - Carrete Seguro</h4>-->
     <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
+      <ul>
+        <li><a href="#bar">Two</a></li>
+        <li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+        <li><a href="#">Three</a></li>
+      </ul>
     </div>
   </div>
   <!-- /footer --> 
 </div>
-<!-- fin pasos 08 -->
-
-
-
+<!-- fin pasos 08 --> 
 
 <!-- Pasos 09 -->
 <div data-role="page" id="pagina09">
@@ -607,27 +681,22 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Titulo9</h2>
-    
-    
-		<input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
   </div>
   <!-- /content -->
-  <div data-role="footer">
+  <div data-role="footer"> 
     <!--<h4>Delivery - Carrete Seguro</h4>-->
     <div data-role="navbar" data-iconpos="bottom">
-     <ul>
-			<li><a href="#bar">Two</a></li>
-			<li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
-			<li><a href="#">Three</a></li>
-		</ul>
+      <ul>
+        <li><a href="#bar">Two</a></li>
+        <li><a href="#pagina01" class="ui-btn-active">Pedido</a></li>
+        <li><a href="#">Three</a></li>
+      </ul>
     </div>
   </div>
   <!-- /footer --> 
 </div>
 <!-- fin pasos 09 -->
-
-
-
 
 </body>
 </html>
