@@ -39,14 +39,6 @@
         <!-- if a single splash screen is specified it will be used for all platforms. Multiple splash screens are recommended for iOS -->
         <!--<gap:splash src="splashes/splash.png" />-->
 
-        <!-- iOS requires specific dimensions for different devices; classic iPhone screens, Retina displays, and iPad screens -->
-				<plugin name="SplashScreen" value="CDVSplashScreen" />
-				<plugin name="SplashScreen" value="org.apache.cordova.SplashScreen"/>
-        <gap:splash src="splashes/splash.png"/>
-        <gap:splash src="splashes/retina.png" width="640" height="960"/>
-        <gap:splash src="splashes/ipad-portrait.png" width="768" height="1004"/>
-        <gap:splash src="splashes/ipad-landscape.png" width="1024" height="748"/>
-
         <!-- to enable individual permissions use the following examples -->
         <feature name="http://api.phonegap.com/1.0/geolocation"/>
 
