@@ -301,6 +301,7 @@ function onConfirm(buttonIndex) {
 		}
 }
 function confirma_si(){
+	console.log('1');
 	// envia información
 	url = "http://www.exefire.com/log/?";
 	url = url + 'lat=' + document.getElementById('lat').value + '&';
@@ -311,21 +312,28 @@ function confirma_si(){
 	url = url + 'numero=' + document.getElementById('direccion_numero').value + '&';
 	url = url + 'otro=' + document.getElementById('direccion_otro').value + '&';
 	url = url + 'comuna=' + document.getElementById('direccion_comuna').value + '&';
+	console.log('2');
 	if(typeof(navigator.notification)=='undefined'){
+		console.log('3a');
 	}else{
+		console.log('3b');
 		url = url + 'device.name=' + device.name + '&';
 		url = url + 'device.platform=' + device.platform + '&';
 		url = url + 'device.uuid=' + device.uuid + '&';
 		url = url + 'device.version=' + device.version + '&';
 	}
+	console.log('4');
 	var valor = 0;
 	valor = valor*1 + precio_despacho*1;
+	console.log('5');
 	$.each(pedido_producto, function(index, value) {
 		if(value > 0){
 			url = url + 'productos_id[]=' + value + '&';
 			url = url + 'productos_n[]=' + pedido_cantidad[index] + '&';
 		}
 	});
+	
+	console.log('6');
 	
 	$.ajax({
 		url: url,
@@ -338,13 +346,17 @@ function confirma_si(){
 			msg(result['respuesta']);
 			// muestra siguiente pagina
 			$.mobile.changePage("#pagina07");
+			console.log('7a');
 		},
 		error: function (request,error) {
 			$.mobile.changePage("#pagina06");
 			var texto = 'Error conectando con el servidor!';
 			msg(texto);
+			console.log('7b');
 		}
 	});
+	
+	console.log('8');
 }
 
 </script>
