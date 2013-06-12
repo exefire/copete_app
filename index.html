@@ -292,7 +292,12 @@ function confirmar(){
 	}
 }
 function onConfirm(buttonIndex) {
-    alert('You selected button ' + buttonIndex);
+    if(buttonIndex==2){
+			// OK
+			confirmar_si();
+		}else{
+			// Cancelar
+		}
 }
 function confirma_si(buttonIndex){
 	// envia información
@@ -378,7 +383,6 @@ html, body {
   <div data-role="content">
     <div style="text-align:center;"><img src="logo.png" width="40%" /></div>
     <p>Pioneros en  delivery de tragos en Chile con más de 6 años de experiencia, un servicio rápido y discreto, abarcando las comunas de:</p>
-   	<p><a href="#" onClick="confirmar()">Boton</a></p>
     <div class="ui-grid-a">
       <div class="ui-block-a">
         <ul style="margin:0px;">
