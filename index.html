@@ -292,12 +292,13 @@ function confirmar(){
 	}
 }
 function onConfirm(buttonIndex) {
-	alert(typeof(buttonIndex));
     if(buttonIndex==2){
 			// OK
+			alert('abc'+ typeof(buttonIndex) + buttonIndex);
 			confirmar_si();
 		}else{
 			// Cancelar
+			alert('DEF'+ typeof(buttonIndex) + buttonIndex);
 		}
 }
 function confirma_si(buttonIndex){
