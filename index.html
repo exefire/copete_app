@@ -279,12 +279,20 @@ function ultimo_paso(){
 
 function confirmar(){
 	// Pregunta
-	navigator.notification.confirm(
-			'Está a punto de hacer el pedido. \n ¿Está todo OK? ',  // message
-			confirma_si,              // callback to invoke with index of button pressed
-			'Confirmar Pedido',            // title
-			'Cancelar,OK'          // buttonLabels
-	);
+	if(typeof(navigator.notification)=='undefined'){
+		var buttonIndex;
+		confirma_si(buttonIndex);
+	}else{
+		navigator.notification.confirm(
+				'Está a punto de hacer el pedido. \n ¿Está todo OK? ',  // message
+				onConfirm,              // callback to invoke with index of button pressed
+				'Confirmar Pedido',            // title
+				'Cancelar,OK'          // buttonLabels
+		);
+	}
+}
+function onConfirm(buttonIndex) {
+    alert('You selected button ' + buttonIndex);
 }
 function confirma_si(buttonIndex){
 	// envia información
@@ -370,6 +378,7 @@ html, body {
   <div data-role="content">
     <div style="text-align:center;"><img src="logo.png" width="40%" /></div>
     <p>Pioneros en  delivery de tragos en Chile con más de 6 años de experiencia, un servicio rápido y discreto, abarcando las comunas de:</p>
+   	<p><a href="#" onClick="confirmar()">Boton</a></p>
     <div class="ui-grid-a">
       <div class="ui-block-a">
         <ul style="margin:0px;">
