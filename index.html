@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Aloo Copete App</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script type="text/javascript" charset="utf-8" src="jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
@@ -472,27 +472,32 @@ function cargar_lista_categorias(){
 			$('#lista_cat').append('<li><a href="#" onClick="actualiza_lista('+key+')">'+value+'</a></li>');
 		}
 	});
-	$('#lista_cat').append('<li><div class="ui-grid-a"> <div class="ui-block-a"> <input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back"> </div> <div class="ui-block-b" id="boton_agregar_producto"> &nbsp;</div></div></li>');
+	var contenido = ('<li><div class="ui-grid-a"> <div class="ui-block-a"> <input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back"> </div> <div class="ui-block-b" id="boton_agregar_producto"> &nbsp;</div></div></li>');
+	$('#lista_cat').append(contenido).trigger('create');
 	$("#lista_cat").listview('refresh');
 }
 function actualiza_lista(id_cat){
 	$("#lista_cat").html('');
 	$.each(maestro_productos_categorias[id_cat], function(key, value) {
 		if(value>0){
-			$('#lista_cat').append('<li><a href="#" style="white-space:normal;" onClick="solo_producto('+key+')">'+productos_nombre[value]+'</a></li>');
+			$('#lista_cat').append('<li><a href="#" style="white-space:normal;" onClick="solo_producto('+key+')">'+productos_nombre[value]+'<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">' + (FormatoDinero(productos_precio[value])) + '</span></a></li>');
 		}
 	});
-	$('#lista_cat').append('<li><div class="ui-grid-a"> <div class="ui-block-a"> <input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back"> </div> <div class="ui-block-b" id="boton_agregar_producto"> &nbsp;</div></div></li>');
+	
+	var contenido = ('<li><div class="ui-grid-a"> <div class="ui-block-a"> <input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back"> </div> <div class="ui-block-b" id="boton_agregar_producto"> &nbsp;</div></div></li>');
+	$('#lista_cat').append(contenido).trigger('create');
 	$("#lista_cat").listview('refresh');
 }
 function solo_producto(id_prod){
 	var boton_aceptar =  '<input type="button" onClick="nuevo_producto('+id_prod+',document.getElementById(\'producto_nuevo_n\').value)" value="Agregar" data-theme="b">';
 	var boton_cancelar = '<input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back">';
-	var cantidad_in = '<input type="number" name="producto_nuevo_n" id="producto_nuevo_n" pattern="[0-9]*" value="" />';
+	var cantidad_in = '<input type="number" name="producto_nuevo_n" id="producto_nuevo_n" pattern="[0-9]*" value="" style="width:"80%;" />';
 	$("#lista_cat").html('');
-	$('#lista_cat').append('<li><div class="ui-grid-a"><div class="ui-block-a">Producto</div><div class="ui-block-b">Cantidad</div></div></li>');
-	$('#lista_cat').append('<li><div class="ui-grid-a"><div class="ui-block-a">'+productos_nombre[id_prod]+'</div><div class="ui-block-b">'+cantidad_in+'</div></div></li>');
-	$('#lista_cat').append('<li><div class="ui-grid-a"><div class="ui-block-a">'+boton_cancelar+'</div><div class="ui-block-b">'+boton_aceptar+'</div></div></li>');
+	var contenido = '';
+	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a">Producto</div><div class="ui-block-b">Cantidad</div></div></li>');
+	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a">'+productos_nombre[id_prod]+'</div><div class="ui-block-b">'+cantidad_in+'</div></div></li>');
+	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a">'+boton_cancelar+'</div><div class="ui-block-b">'+boton_aceptar+'</div></div></li>');
+	$('#lista_cat').append(contenido).trigger('create');
 	$("#lista_cat").listview('refresh');
 }
 
