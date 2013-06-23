@@ -9,7 +9,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" charset="utf-8">
 var url_master = 'http://www.aloocopete.cl/comandas/';	
-var url_master = 'http://192.168.2.5/alocopete/comandas/';
+//var url_master = 'http://192.168.2.5/alocopete/comandas/';
 var watchID = null;
 var map;
 var marker;
@@ -22,6 +22,9 @@ var productos_nombre = {};
 var productos_precio = {};
 var producto_temp_id = 0;
 var producto_temp_n = 0;
+
+var maestro_categorias = [];
+var maestro_productos_categorias = [];
 
 
 
@@ -219,37 +222,42 @@ function suma_total(){
 	});
 	$("#valor_total").html(FormatoDinero(valor));
 }
-function nuevo_producto(){
-	// agrega nuevo producto.
-	producto_temp_id = document.getElementById('producto_nuevo_id').value;
-	producto_temp_n = document.getElementById('producto_nuevo_n').value;
-	
-	var id = pedido_producto.length;
+function nuevo_producto(producto_temp_id,producto_temp_n){
+	if(producto_temp_n>0){
+		// agrega nuevo producto.
+		//producto_temp_id = document.getElementById('producto_nuevo_id').value;
+		//producto_temp_n = document.getElementById('producto_nuevo_n').value;
 		
-	pedido_producto[id] = producto_temp_id;
-	pedido_cantidad[id] = producto_temp_n;
-	
-	$('.ui-dialog').dialog('close');
-	texto = '<div id="producto_linea'+id+'">';
-	texto = texto + '<input name="productos_matriz[]" id="productos_matriz[]" type="hidden" value="'+producto_temp_id+'">';
-	texto = texto + '<input name="productos_matriz_n[]" id="productos_matriz_n[]" type="hidden" value="'+producto_temp_n+'">';
-	texto = texto + '<div class="ui-grid-b">';
-	texto = texto + '<div class="ui-block-a" style="text-align:left; width:50%;">';
-	texto = texto + productos_nombre[producto_temp_id];
-	texto = texto + ' - <a href="#" onClick="eliminar_producto('+id+')">Eliminar</a>';
-	texto = texto + '</div>';
-	texto = texto + '<div class="ui-block-b" style="text-align:center; width:20%;">';
-	texto = texto + document.getElementById('producto_nuevo_n').value;
-	texto = texto + '</div>';
-	texto = texto + '<div class="ui-block-c" style="text-align:right; width:30%;">';
-	texto = texto + FormatoDinero(productos_precio[producto_temp_id]*document.getElementById('producto_nuevo_n').value);
-	texto = texto + '</div>';
-	texto = texto + '</div>';
-	//texto = texto + '<p>'+productos_lista[producto_temp_id]['nombre']+' (' + document.getElementById('producto_nuevo_n').value + ')</p>';
-	texto = texto + '<hr>';
-	texto = texto + '</div>';
-	suma_total();
-	$('#lista_productos').append(texto);
+		var id = pedido_producto.length;
+			
+		pedido_producto[id] = producto_temp_id;
+		pedido_cantidad[id] = producto_temp_n;
+		
+		$('.ui-dialog').dialog('close');
+		texto = '<div id="producto_linea'+id+'">';
+		//texto = texto + '<input name="productos_matriz[]" id="productos_matriz[]" type="hidden" value="'+producto_temp_id+'">';
+		//texto = texto + '<input name="productos_matriz_n[]" id="productos_matriz_n[]" type="hidden" value="'+producto_temp_n+'">';
+		texto = texto + '<div class="ui-grid-b">';
+		texto = texto + '<div class="ui-block-a" style="text-align:left; width:50%;">';
+		texto = texto + productos_nombre[producto_temp_id];
+		texto = texto + ' - <a href="#" onClick="eliminar_producto('+id+')">Eliminar</a>';
+		texto = texto + '</div>';
+		texto = texto + '<div class="ui-block-b" style="text-align:center; width:20%;">';
+		texto = texto + producto_temp_n;
+		texto = texto + '</div>';
+		texto = texto + '<div class="ui-block-c" style="text-align:right; width:30%;">';
+		texto = texto + FormatoDinero(productos_precio[producto_temp_id]*producto_temp_n);
+		texto = texto + '</div>';
+		texto = texto + '</div>';
+		//texto = texto + '<p>'+productos_lista[producto_temp_id]['nombre']+' (' + document.getElementById('producto_nuevo_n').value + ')</p>';
+		texto = texto + '<hr>';
+		texto = texto + '</div>';
+		suma_total();
+		$('#lista_productos').append(texto);
+	}else{
+		var text = 'Cantidad incorrecta.';
+		msg(text);
+	}
 }
 $("#pagina05").live('pagebeforeshow', function() {
 	// Cuando aparece la pantalla de producto
@@ -265,10 +273,15 @@ $("#pagina05").live('pagebeforeshow', function() {
 			productos_nombre = {};
 			productos_precio = {};
 			$.each(result, function(key, value) {
-				var tex = '<option value="'+result[key]['id_producto']+'">'+result[key]['nombre_categoria']+': '+result[key]['nombre']+'</option>';
-				$('#producto_nuevo_id').append(tex);
+				//var tex = '<option value="'+result[key]['id_producto']+'">'+result[key]['nombre_categoria']+': '+result[key]['nombre']+'</option>';
+				//$('#producto_nuevo_id').append(tex);
 				productos_nombre[result[key]['id_producto']] = result[key]['nombre'];
 				productos_precio[result[key]['id_producto']] = result[key]['precio'];
+				maestro_categorias[result[key]['id_categoria']] = result[key]['nombre_categoria'];
+				if (typeof(maestro_productos_categorias[result[key]['id_categoria']]) == 'undefined') {
+					maestro_productos_categorias[result[key]['id_categoria']] = [];
+				}
+				maestro_productos_categorias[result[key]['id_categoria']][result[key]['id_producto']] = result[key]['id_producto'];
 			});
 		},
 		error: function (request,error) {
@@ -280,8 +293,9 @@ $("#pagina05").live('pagebeforeshow', function() {
 });
 $("#nuevo_producto").live('pagebeforeshow', function() {
 	// Cuando aparece la pantalla de agregar nuevo producto al pedido
-	$('#producto_nuevo_id').prop('selectedIndex',2);
-	document.getElementById('producto_nuevo_n').value = '';
+	//$('#producto_nuevo_id').prop('selectedIndex',2);
+	//document.getElementById('producto_nuevo_n').value = '';
+	cargar_lista_categorias();
 });
 function FormatoDinero(x) {
     return '$' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -404,7 +418,7 @@ function confirma_si(){
 }
 function boton_cancelar_pedido(){
 	if(typeof(navigator.notification)=='undefined'){
-		var buttonIndex = 1;
+		var buttonIndex = 2;
 		cancelar_pedido_salto(buttonIndex);
 	}else{
 		navigator.notification.confirm(
@@ -415,9 +429,14 @@ function boton_cancelar_pedido(){
 		);
 	}
 }
-function cancelar_pedido_salto(boton){
-	cancelar_pedido();
-	$.mobile.changePage("#pagina01");
+function cancelar_pedido_salto(buttonIndex){
+	if(buttonIndex==2){
+		// Si
+		cancelar_pedido();
+		$.mobile.changePage("#pagina01");
+	}else{
+		// No
+	}
 }
 function cancelar_pedido(){
 	// También se usa cuando se finaliza el pedido.
@@ -446,6 +465,38 @@ function cancelar_pedido(){
 	producto_temp_id = 0;
 	producto_temp_n = 0;
 }
+function cargar_lista_categorias(){
+	$("#lista_cat").html('');
+	$.each(maestro_categorias, function(key, value) {
+		if(key>0){
+			$('#lista_cat').append('<li><a href="#" onClick="actualiza_lista('+key+')">'+value+'</a></li>');
+		}
+	});
+	$('#lista_cat').append('<li><div class="ui-grid-a"> <div class="ui-block-a"> <input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back"> </div> <div class="ui-block-b" id="boton_agregar_producto"> &nbsp;</div></div></li>');
+	$("#lista_cat").listview('refresh');
+}
+function actualiza_lista(id_cat){
+	$("#lista_cat").html('');
+	$.each(maestro_productos_categorias[id_cat], function(key, value) {
+		if(value>0){
+			$('#lista_cat').append('<li><a href="#" style="white-space:normal;" onClick="solo_producto('+key+')">'+productos_nombre[value]+'</a></li>');
+		}
+	});
+	$('#lista_cat').append('<li><div class="ui-grid-a"> <div class="ui-block-a"> <input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back"> </div> <div class="ui-block-b" id="boton_agregar_producto"> &nbsp;</div></div></li>');
+	$("#lista_cat").listview('refresh');
+}
+function solo_producto(id_prod){
+	var boton_aceptar =  '<input type="button" onClick="nuevo_producto('+id_prod+',document.getElementById(\'producto_nuevo_n\').value)" value="Agregar" data-theme="b">';
+	var boton_cancelar = '<input type="button" onClick="$(\'.ui-dialog\').dialog(\'close\')" value="Cancelar" data-theme="a" data-rel="back">';
+	var cantidad_in = '<input type="number" name="producto_nuevo_n" id="producto_nuevo_n" pattern="[0-9]*" value="" />';
+	$("#lista_cat").html('');
+	$('#lista_cat').append('<li><div class="ui-grid-a"><div class="ui-block-a">Producto</div><div class="ui-block-b">Cantidad</div></div></li>');
+	$('#lista_cat').append('<li><div class="ui-grid-a"><div class="ui-block-a">'+productos_nombre[id_prod]+'</div><div class="ui-block-b">'+cantidad_in+'</div></div></li>');
+	$('#lista_cat').append('<li><div class="ui-grid-a"><div class="ui-block-a">'+boton_cancelar+'</div><div class="ui-block-b">'+boton_aceptar+'</div></div></li>');
+	$("#lista_cat").listview('refresh');
+}
+
+		
 </script>
 <meta charset="UTF-8">
 <style type="text/css">
@@ -669,28 +720,38 @@ html, body {
 <div data-role="page" id="nuevo_producto">
   <div data-role="content">
     <h2>Agregar Producto</h2>
-    <div data-role="fieldcontain">
-      <label for="producto_nuevo_id">Producto:</label>
-      <select name="producto_nuevo_id" id="producto_nuevo_id">
-        <option value="">Seleccione...</option>
-      </select>
-    </div>
-    <div data-role="fieldcontain">
-      <label for="producto_nuevo_n">Cantidad:</label>
-      <input type="number" name="producto_nuevo_n" id="producto_nuevo_n" pattern="[0-9]*" value="" />
-    </div>
-    <div class="ui-grid-a">
-      <div class="ui-block-a">
-        <input type="button" onClick="$('.ui-dialog').dialog('close')" value="Cancelar" data-theme="a" data-rel="back">
-      </div>
-      <div class="ui-block-b">
-        <input type="button" onClick="nuevo_producto()" value="Agregar" data-theme="b">
-      </div>
-    </div>
+    
+    <ul data-role="listview" id="lista_cat">
+    </ul>
+    
   </div>
   <!-- /content --> 
 </div>
 <!--Fin Nuevo Producto--> 
+
+
+
+<!-- Pasos 10 -->
+<div data-role="page" id="pagina10">
+  <div data-role="header">
+    <h1>Aloo Copete</h1>
+  </div>
+  <!-- /header -->
+  <div data-role="content">
+    <h2>Titulo 10</h2>
+    
+    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+  </div>
+  <!-- /content -->
+</div>
+<!-- fin pasos 10 -->
+
+
+
+
+
+
+
 
 <!-- Pasos 06 -->
 <div data-role="page" id="pagina06">
