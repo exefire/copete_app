@@ -345,11 +345,12 @@ function confirma_si(){
 		success: function (result) {
 			// Cargando al select
 			console.log('6.9');
-			var respuesta = "";
+			var respuesta = "a: ";
 			$.each(result, function(index, value) {
 				if(index=='respuesta'){
-					respuesta = value;
+					respuesta = respuesta + value;
 				}
+				console.log(index + '=>' + value);
 			});
 			msg(respuesta);
 			// muestra siguiente pagina
