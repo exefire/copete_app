@@ -6,15 +6,26 @@
 <script type="text/javascript" charset="utf-8" src="jquery-1.8.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-<script src="http://debug.phonegap.com/target/target-script-min.js#exefirealo"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" charset="utf-8">
 var url_master = 'http://www.aloocopete.cl/comandas/';	
+var url_master = 'http://192.168.2.5/alocopete/comandas/';
 var watchID = null;
 var map;
 var marker;
 var mapa_existe = false;
 var draw_circle;
+var pedido_producto = [];
+var pedido_cantidad = [];
+var precio_despacho = 0;
+var productos_nombre = {};
+var productos_precio = {};
+var producto_temp_id = 0;
+var producto_temp_n = 0;
+
+
+
+
 
 // Wait for Cordova to load
 //
@@ -25,6 +36,7 @@ document.addEventListener("deviceready", onDeviceReady, true);
 function onDeviceReady() {
 		//navigator.notification.alert('Cordova is ready');
 }
+
 function alertDismissed() {
     // hacer algo
 }
@@ -125,7 +137,6 @@ function msg(texto){
 		);
 	}
 }
-var precio_despacho = 0;
 function mostrar(){
 	var lat = document.getElementById('lat').value;
 	var lon = document.getElementById('lon').value;
@@ -152,6 +163,46 @@ function mostrar(){
 		}
 	});
 }
+function paso_datos(){
+	var error_txt = "Faltan Datos: ";
+	var matriz = [];
+	var error = false;
+	if(document.getElementById('cliente_nombre').value==''){
+		matriz.push("Nombre");
+		error = true;
+	}
+	if(document.getElementById('cliente_telefono').value==''){
+		matriz.push("Teléfono");
+		error = true;
+	}
+	if(error){
+		msg(error_txt + matriz.join(", "));
+	}else{
+		$.mobile.changePage("#pagina04");
+	}
+}
+function paso_direccion(){
+	var error_txt = "Faltan Datos: ";
+	var matriz = [];
+	var error = false;
+	if(document.getElementById('direccion_calle').value==''){
+		matriz.push("Calle");
+		error = true;
+	}
+	if(document.getElementById('direccion_numero').value==''){
+		matriz.push("Número");
+		error = true;
+	}
+	if(document.getElementById('direccion_comuna').value==''){
+		matriz.push("Comuna");
+		error = true;
+	}
+	if(error){
+		msg(error_txt + matriz.join(", "));
+	}else{
+		$.mobile.changePage("#pagina05");
+	}
+}
 function eliminar_producto(id){
 	$("#producto_linea"+id).empty();
 	pedido_producto[id] = 0;
@@ -168,8 +219,6 @@ function suma_total(){
 	});
 	$("#valor_total").html(FormatoDinero(valor));
 }
-var pedido_producto = [];
-var pedido_cantidad = [];
 function nuevo_producto(){
 	// agrega nuevo producto.
 	producto_temp_id = document.getElementById('producto_nuevo_id').value;
@@ -202,9 +251,7 @@ function nuevo_producto(){
 	suma_total();
 	$('#lista_productos').append(texto);
 }
-var productos_nombre = {};
-var productos_precio = {};
-$("#pagina05").live('pageinit', function() {
+$("#pagina05").live('pagebeforeshow', function() {
 	// Cuando aparece la pantalla de producto
 	url = url_master + "productos.json.php";
 	$.ajax({
@@ -215,6 +262,8 @@ $("#pagina05").live('pageinit', function() {
 		async: true,
 		success: function (result) {
 			// Cargando al select
+			productos_nombre = {};
+			productos_precio = {};
 			$.each(result, function(key, value) {
 				var tex = '<option value="'+result[key]['id_producto']+'">'+result[key]['nombre_categoria']+': '+result[key]['nombre']+'</option>';
 				$('#producto_nuevo_id').append(tex);
@@ -234,8 +283,6 @@ $("#nuevo_producto").live('pagebeforeshow', function() {
 	$('#producto_nuevo_id').prop('selectedIndex',2);
 	document.getElementById('producto_nuevo_n').value = '';
 });
-var producto_temp_id = 0;
-var producto_temp_n = 0;
 function FormatoDinero(x) {
     return '$' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
@@ -342,11 +389,11 @@ function confirma_si(){
 				if(index=='respuesta'){
 					respuesta = respuesta + value;
 				}
-				console.log(index + '=>' + value);
 			});
 			$("#respuesta_final").html(respuesta);
 			// muestra siguiente pagina
 			$.mobile.changePage("#pagina07");
+			cancelar_pedido();
 		},
 		error: function (request,error) {
 			$.mobile.changePage("#pagina06");
@@ -355,10 +402,57 @@ function confirma_si(){
 		}
 	});
 }
-
+function boton_cancelar_pedido(){
+	if(typeof(navigator.notification)=='undefined'){
+		var buttonIndex = 1;
+		cancelar_pedido_salto(buttonIndex);
+	}else{
+		navigator.notification.confirm(
+				'¿Seguro que quiere cancelar el pedido? ',  // message
+				cancelar_pedido_salto,              // callback to invoke with index of button pressed
+				'Cancelar Pedido',            // title
+				'No,Si'          // buttonLabels
+		);
+	}
+}
+function cancelar_pedido_salto(boton){
+	cancelar_pedido();
+	$.mobile.changePage("#pagina01");
+}
+function cancelar_pedido(){
+	// También se usa cuando se finaliza el pedido.
+	
+	// Mapa
+	
+	// Lista de productos
+	$("#valor_despacho").html('');
+	$("#valor_total").html('');
+	$("#nombre_conf").html('');
+	$("#telefono_conf").html('');
+	$("#direccion_conf").html('');
+	$("#comuna_conf").html('');
+	$("#valor_despacho_conf").html('');
+	$("#valor_total_conf").html('');
+	
+	$("#lista_productos").html('');
+	//$("#producto_nuevo_id").html('');
+	$("#lista_productos_conf").html('');
+		
+	pedido_producto = [];
+	pedido_cantidad = [];
+	precio_despacho = 0;
+	productos_nombre = {};
+	productos_precio = {};
+	producto_temp_id = 0;
+	producto_temp_n = 0;
+}
 </script>
 <meta charset="UTF-8">
 <style type="text/css">
+a:link {
+	webkitTouchCallout: 'none';
+	webkitUserSelect: 'none';
+}
 html, body {
 	height: 100%;
 	margin: 0;
@@ -457,7 +551,7 @@ html, body {
 
 <!-- Pasos 02 -->
 <div data-role="page" id="pagina02">
-  <div data-role="header">
+  <div data-role="header"> <a href="#" onClick="boton_cancelar_pedido()" data-icon="delete">Cancelar</a>
     <h1>Aloo Copete</h1>
   </div>
   <!-- /header -->
@@ -476,7 +570,7 @@ html, body {
 
 <!-- Pasos 03 -->
 <div data-role="page" id="pagina03">
-  <div data-role="header">
+  <div data-role="header"> <a href="#" onClick="boton_cancelar_pedido()" data-icon="delete">Cancelar</a>
     <h1>Aloo Copete</h1>
   </div>
   <!-- /header -->
@@ -490,7 +584,7 @@ html, body {
       <label for="cliente_telefono">Teléfono:</label>
       <input type="number" name="cliente_telefono" id="cliente_telefono" pattern="[0-9]*" value="" />
     </div>
-    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="paso_datos()" value="Siguiente" data-theme="b">
   </div>
   <!-- /content --> 
 </div>
@@ -498,7 +592,7 @@ html, body {
 
 <!-- Pasos 04 -->
 <div data-role="page" id="pagina04">
-  <div data-role="header">
+  <div data-role="header"> <a href="#" onClick="boton_cancelar_pedido()" data-icon="delete">Cancelar</a>
     <h1>Aloo Copete</h1>
   </div>
   <!-- /header -->
@@ -524,15 +618,15 @@ html, body {
       <label for="cliente_nombre">Comuna:</label>
       <input type="text" name="direccion_comuna" id="direccion_comuna" value="" />
     </div>
-    <input type="button" onClick="window.location='#pagina05';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="paso_direccion()" value="Siguiente" data-theme="b">
   </div>
   <!-- /content --> 
 </div>
 <!-- fin pasos 04 --> 
 
 <!-- Pasos 05 -->
-<div data-role="page" id="pagina05">
-  <div data-role="header">
+<div data-role="page" id="pagina05" data-position="fixed" data-fullscreen="true">
+  <div data-role="header"> <a href="#" onClick="boton_cancelar_pedido()" data-icon="delete">Cancelar</a>
     <h1>Aloo Copete</h1>
   </div>
   <!-- /header -->
@@ -600,7 +694,7 @@ html, body {
 
 <!-- Pasos 06 -->
 <div data-role="page" id="pagina06">
-  <div data-role="header">
+  <div data-role="header"> <a href="#" onClick="boton_cancelar_pedido()" data-icon="delete">Cancelar</a>
     <h1>Aloo Copete</h1>
   </div>
   <!-- /header -->
@@ -628,16 +722,19 @@ html, body {
     <div class="ui-grid-b">
       <div style="text-align:left; width:50%;" class="ui-block-a">Despacho</div>
       <div style="text-align:right; width:20%;" class="ui-block-b">&nbsp;</div>
-      <div style="text-align:right; width:30%;" class="ui-block-c"><div id="valor_despacho_conf"></div></div>
+      <div style="text-align:right; width:30%;" class="ui-block-c">
+        <div id="valor_despacho_conf"></div>
+      </div>
     </div>
     <hr>
     <div class="ui-grid-b">
       <div style="text-align:left; width:50%; font-weight:bold;" class="ui-block-a">&nbsp;</div>
       <div style="text-align:right; width:20%; font-weight:bold; padding-right:5px;" class="ui-block-b">Total</div>
-      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c"><div id="valor_total_conf"></div></div>
+      <div style="text-align:right; width:30%; font-weight:bold;" class="ui-block-c">
+        <div id="valor_total_conf"></div>
+      </div>
     </div>
     <input type="button" onClick="confirmar()" value="Confirmar" data-theme="b">
-    <input type="button" onClick="confirma_si()" value="Confirmar2" data-theme="b">
   </div>
   <!-- /content --> 
 </div>
