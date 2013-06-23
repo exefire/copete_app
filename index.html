@@ -303,7 +303,8 @@ function onConfirm(buttonIndex) {
 function confirma_si(){
 	console.log('1');
 	// envia información
-	url = "http://www.exefire.com/log/?";
+	url = url_master + "pedido.json.php?";
+	//url = "http://www.exefire.com/log/?";
 	url = url + 'lat=' + document.getElementById('lat').value + '&';
 	url = url + 'lon=' + document.getElementById('lon').value + '&';
 	url = url + 'cliente_nombre=' + document.getElementById('cliente_nombre').value + '&';
@@ -343,7 +344,10 @@ function confirma_si(){
 		async: true,
 		success: function (result) {
 			// Cargando al select
-			msg(result['respuesta']);
+			console.log('6.9');
+			//console.log(result['respuesta']);
+			//msg(result['respuesta']);
+			msg('recibido');
 			// muestra siguiente pagina
 			$.mobile.changePage("#pagina07");
 			console.log('7a');
