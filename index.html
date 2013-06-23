@@ -347,8 +347,15 @@ function confirma_si(){
 			console.log('6.9');
 			//console.log(result['respuesta']);
 			//msg(result['respuesta']);
-			msg('recibido');
-			console.log(result);
+			//msg('recibido');
+			$.each(result, function(index, value) {
+				if(value > 0){
+					console.log(index + '=>' + value);
+				}
+			});
+			var key = "respuesta";
+			msg(result.respuesta);
+			//console.log(result);
 			// muestra siguiente pagina
 			$.mobile.changePage("#pagina07");
 			console.log('7a');
