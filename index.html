@@ -142,7 +142,7 @@ function mostrar(){
 			var nombre = result['nombre'];
 			precio_despacho = result['precio1'];
 			var texto = 'Sector: ' + nombre;
-			msg(texto);
+			//msg(texto);
 			$.mobile.changePage("#pagina03");
 			$("#valor_despacho").html(FormatoDinero(precio_despacho));
 		},
@@ -301,10 +301,9 @@ function onConfirm(buttonIndex) {
 		}
 }
 function confirma_si(){
-	console.log('1');
 	// envia información
 	url = url_master + "pedido.json.php?";
-	url = "http://www.exefire.com/log/?";
+	//url = "http://www.exefire.com/log/?";
 	url = url + 'lat=' + document.getElementById('lat').value + '&';
 	url = url + 'lon=' + document.getElementById('lon').value + '&';
 	url = url + 'cliente_nombre=' + document.getElementById('cliente_nombre').value + '&';
@@ -313,20 +312,15 @@ function confirma_si(){
 	url = url + 'numero=' + document.getElementById('direccion_numero').value + '&';
 	url = url + 'otro=' + document.getElementById('direccion_otro').value + '&';
 	url = url + 'comuna=' + document.getElementById('direccion_comuna').value + '&';
-	console.log('2');
 	if(typeof(navigator.notification)=='undefined'){
-		console.log('3a');
 	}else{
-		console.log('3b');
 		url = url + 'device.name=' + device.name + '&';
 		url = url + 'device.platform=' + device.platform + '&';
 		url = url + 'device.uuid=' + device.uuid + '&';
 		url = url + 'device.version=' + device.version + '&';
 	}
-	console.log('4');
 	var valor = 0;
 	valor = valor*1 + precio_despacho*1;
-	console.log('5');
 	$.each(pedido_producto, function(index, value) {
 		if(value > 0){
 			url = url + 'productos_id[]=' + value + '&';
@@ -334,7 +328,6 @@ function confirma_si(){
 		}
 	});
 	
-	console.log('6');
 	
 	$.ajax({
 		url: url,
@@ -344,28 +337,23 @@ function confirma_si(){
 		async: true,
 		success: function (result) {
 			// Cargando al select
-			console.log('6.9');
-			var respuesta = "a: ";
+			var respuesta = "";
 			$.each(result, function(index, value) {
 				if(index=='respuesta'){
 					respuesta = respuesta + value;
 				}
 				console.log(index + '=>' + value);
 			});
-			msg(respuesta);
+			$("#respuesta_final").html(respuesta);
 			// muestra siguiente pagina
 			$.mobile.changePage("#pagina07");
-			console.log('7a');
 		},
 		error: function (request,error) {
 			$.mobile.changePage("#pagina06");
 			var texto = 'Error conectando con el servidor!';
 			msg(texto);
-			console.log('7b');
 		}
 	});
-	
-	console.log('8');
 }
 
 </script>
@@ -524,7 +512,7 @@ html, body {
       <div class="ui-grid-a">
         <div class="ui-block-a">
           <label for="cliente_nombre">Nº:</label>
-          <input type="text" name="direccion_numero" id="direccion_numero" value="" />
+          <input type="text" name="direccion_numero" id="direccion_numero" pattern="[0-9]*" value="" />
         </div>
         <div class="ui-block-b">
           <label for="cliente_nombre">Dpto / Casa:</label>
@@ -663,7 +651,7 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Gracias!</h2>
-    <p>Te llamaremos para confirmar tu pedido!</p>
+    <div id="respuesta_final"></div>
   </div>
   <!-- /content -->
   <div data-role="footer"> 
