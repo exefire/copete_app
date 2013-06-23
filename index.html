@@ -304,7 +304,7 @@ function confirma_si(){
 	console.log('1');
 	// envia información
 	url = url_master + "pedido.json.php?";
-	//url = "http://www.exefire.com/log/?";
+	url = "http://www.exefire.com/log/?";
 	url = url + 'lat=' + document.getElementById('lat').value + '&';
 	url = url + 'lon=' + document.getElementById('lon').value + '&';
 	url = url + 'cliente_nombre=' + document.getElementById('cliente_nombre').value + '&';
@@ -348,6 +348,7 @@ function confirma_si(){
 			//console.log(result['respuesta']);
 			//msg(result['respuesta']);
 			msg('recibido');
+			console.log(result);
 			// muestra siguiente pagina
 			$.mobile.changePage("#pagina07");
 			console.log('7a');
