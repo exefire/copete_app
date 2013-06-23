@@ -347,9 +347,7 @@ function confirma_si(){
 			console.log('6.9');
 			var respuesta = "";
 			$.each(result, function(index, value) {
-				if(value > 0){
-					respuesta = respuesta + value;
-				}
+				respuesta = respuesta + value;
 			});
 			msg(respuesta);
 			// muestra siguiente pagina
