@@ -19,6 +19,7 @@ var pedido_producto = [];
 var pedido_cantidad = [];
 var precio_despacho = 0;
 var productos_nombre = {};
+var productos_stock = {};
 var productos_precio = {};
 var producto_temp_id = 0;
 var producto_temp_n = 0;
@@ -271,11 +272,13 @@ $("#pagina05").live('pagebeforeshow', function() {
 		success: function (result) {
 			// Cargando al select
 			productos_nombre = {};
+			productos_stock = {};
 			productos_precio = {};
 			$.each(result, function(key, value) {
 				//var tex = '<option value="'+result[key]['id_producto']+'">'+result[key]['nombre_categoria']+': '+result[key]['nombre']+'</option>';
 				//$('#producto_nuevo_id').append(tex);
 				productos_nombre[result[key]['id_producto']] = result[key]['nombre'];
+				productos_stock[result[key]['id_producto']] = result[key]['stock'];
 				productos_precio[result[key]['id_producto']] = result[key]['precio'];
 				maestro_categorias[result[key]['id_categoria']] = result[key]['nombre_categoria'];
 				if (typeof(maestro_productos_categorias[result[key]['id_categoria']]) == 'undefined') {
@@ -480,7 +483,11 @@ function actualiza_lista(id_cat){
 	$("#lista_cat").html('');
 	$.each(maestro_productos_categorias[id_cat], function(key, value) {
 		if(value>0){
-			$('#lista_cat').append('<li><a href="#" style="white-space:normal;" onClick="solo_producto('+key+')">'+productos_nombre[value]+'<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">' + (FormatoDinero(productos_precio[value])) + '</span></a></li>');
+			if(productos_stock[value]>0){
+				$('#lista_cat').append('<li><a href="#" style="white-space:normal;" onClick="solo_producto('+key+')">'+productos_nombre[value]+'<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">' + (FormatoDinero(productos_precio[value])) + '</span></a></li>');
+			}else{
+				$('#lista_cat').append('<li>'+productos_nombre[value] + ' <br><span style="color:#F00;">Sin Stock</span>' + '<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">' + (FormatoDinero(productos_precio[value])) + '</span></li>');
+			}
 		}
 	});
 	
