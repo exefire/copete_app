@@ -28,15 +28,19 @@
         <!-- specifies the icon to be displayed when hovered over (on BlackBerry) -->
         <icon src="icons/icon-hover.png" hover="true" />
 
-        <!-- iOS requires specific dimensions for icons; classic iPhone screens, Retina displays, and iPad screens respectively -->
-        <icon src="icons/icon-iphone-57.png" width="57" height="57"/>
-        <icon src="icons/icon-iphone-72.png" width="72" height="72"/>
-        <icon src="icons/icon-iphone-114.png" width="114" height="114"/>
-
         <!-- Android requires specific dimensions; ldpi, mdpi, and hdpi respectively -->
-        <icon src="icons/icon-android-36.png" width="36" height="36"/>
-        <icon src="icons/icon-android-48.png" width="48" height="48"/>
-        <icon src="icons/icon-android-72.png" width="72" height="72"/>
+				<icon src="icons/android/icon-android-36.png" gap:platform="android" gap:density="ldpi" />
+				<icon src="icons/android/icon-android-48.png" gap:platform="android" gap:density="mdpi" />
+				<icon src="icons/android/icon-android-72.png" gap:platform="android" gap:density="hdpi" />
+				<icon src="icons/android/icon-android-72.png" gap:platform="android" gap:density="xhdpi" />
+				
+				<icon src="icons/ios/icon-iphone-72.png" gap:platform="ios" width="57" height="57" />
+				<icon src="icons/ios/icon-iphone-72.png" gap:platform="ios" width="72" height="72" />
+				<icon src="icons/ios/icon-iphone-114.png" gap:platform="ios" width="114" height="114" />
+				
+				<!-- retina iPad support: PhoneGap 2.5.0+ only -->
+				<icon src="icons/ios/icon-iphone-114.png" gap:platform="ios" width="144" height="144" />
+				
 						
 				<gap:splash src="splash.png" />
 				
