@@ -22,12 +22,6 @@
         <!-- if a single icon is specified then Build will use it for all platforms -->
         <icon src="icons/icon.png" />
         
-        <!-- the default attribute can also be used -->
-        <icon src="icons/icon.png" default="true" />
-
-        <!-- specifies the icon to be displayed when hovered over (on BlackBerry) -->
-        <icon src="icons/icon-hover.png" hover="true" />
-
         <!-- Android requires specific dimensions; ldpi, mdpi, and hdpi respectively -->
 				<icon src="icons/android/icon-android-36.png" gap:platform="android" gap:density="ldpi" />
 				<icon src="icons/android/icon-android-48.png" gap:platform="android" gap:density="mdpi" />
