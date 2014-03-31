@@ -35,6 +35,8 @@
   <!--<gap:splash src="splashes/splash.png" />-->
   
   <!-- to enable individual permissions use the following examples -->
+
+	<feature name="http://api.phonegap.com/1.0/geolocation"/>
 	<feature name="Geolocation">
 			<param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
 	</feature>

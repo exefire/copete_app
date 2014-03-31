@@ -27,6 +27,7 @@ document.addEventListener("deviceready", onDeviceReady, true);
 //
 function onDeviceReady() {
 		//navigator.notification.alert('Cordova is ready');
+		watchPosition();
 }
 
 function alertDismissed() {
@@ -40,8 +41,9 @@ function getCurrentPosition() {
 	navigator.geolocation.getCurrentPosition(onSuccess, ErrorUbicacion);    
 }
 function watchPosition() {
-	var options = { frequency: 1000 };
+	var options = { frequency: 3000 };
 	watchID = navigator.geolocation.watchPosition(posicion_ok, ErrorUbicacion, options);
+
 }
 
 
