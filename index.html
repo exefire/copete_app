@@ -58,7 +58,7 @@ function watchPosition() {
 function inicia_posicion(){
 	// Cambia de página
 	$.mobile.changePage("#pagina02");
-		$.mobile.loading( 'show', {
+	$.mobile.loading( 'show', {
 		text: 'Localizando',
 		textVisible: true,
 		theme: 'a',
@@ -260,6 +260,7 @@ function nuevo_producto(producto_temp_id,producto_temp_n){
 		msg(text);
 	}
 }
+
 $("#pagina05").live('pagebeforeshow', function() {
 	// Cuando aparece la pantalla de producto
 	url = url_master + "productos.json.php";
