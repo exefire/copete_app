@@ -38,14 +38,7 @@ function queryDB(tx) {
 
 // Query the success callback
 function querySuccess(tx, results) {
-		$('#contenido').html('');
-		var len = results.rows.length;
-		for (var i=0; i<len; i++){
-				var txt = '<b>'+results.rows.item(i).campo+':</b> ' + results.rows.item(i).valor;
-				//console.log(txt);
-				$('#contenido').append(txt);
-				$('#contenido').append('<br>');
-		}
+		//
 }
 
 // Transaction error callback
