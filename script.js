@@ -54,10 +54,34 @@ function watchPosition() {
 
 }
 
-
-
-
-
+function comenzar(){
+	url = url_master + "horario.json.php";
+	$.ajax({
+		url: url,
+		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
+		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		dataType: "jsonp",
+		async: true,
+		success: function (result) {
+			// Cargando al select
+			var respuesta = "";
+			$.each(result, function(index, value) {
+				if(index=='horario'){
+					horario = value;
+				}
+			});
+			if(horario<1){
+				$.mobile.changePage("#pagina08");
+			}else{
+				inicia_posicion();
+			}
+		},
+		error: function (request,error) {
+			var texto = 'Error conectando con el servidor!';
+			msg(texto);$.mobile.changePage("#pagina08");
+		}
+	});
+}
 
 function inicia_posicion(){
 	escribe_datos_guardados();
