@@ -27,8 +27,16 @@ document.addEventListener("deviceready", onDeviceReady, true);
 //
 function onDeviceReady() {
 		//navigator.notification.alert('Cordova is ready');
-		watchPosition();
+		//watchPosition();
 }
+
+function clearWatch() {
+	if (watchID != null) {
+		navigator.geolocation.clearWatch(watchID);
+		watchID = null;
+	}
+}
+
 
 function alertDismissed() {
     // hacer algo
@@ -156,6 +164,7 @@ function mostrar(){
 			var texto = 'Sector: ' + nombre;
 			//msg(texto);
 			$.mobile.changePage("#pagina03");
+			clearWatch();
 			$("#valor_despacho").html(FormatoDinero(precio_despacho));
 		},
 		error: function (request,error) {
