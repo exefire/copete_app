@@ -7,6 +7,7 @@
 <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script type="text/javascript" charset="utf-8" src="script.js"></script>
+<script type="text/javascript" charset="utf-8" src="db.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
 <meta charset="UTF-8">
@@ -35,7 +36,9 @@ html, body {
   <div data-role="content" style="color:#FFF; text-shadow:none;">
     <div style="text-align:center;"><img src="logo.png" width="50%" /></div>
     <p>Pioneros en  delivery de tragos en Chile con m&aacute;s de 6 a&ntilde;os de experiencia, un servicio r&aacute;pido y discreto, abarcando las comunas de:</p>
-    <div class="ui-grid-a">
+    
+      <div id="contenido"><a href="#" onClick="cargar()">123</a></div>
+      <div class="ui-grid-a">
       <div class="ui-block-a">
         <ul style="margin:0px;">
           <li>Las Condes</li>

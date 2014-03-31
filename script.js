@@ -23,12 +23,6 @@ var maestro_productos_categorias = [];
 //
 document.addEventListener("deviceready", onDeviceReady, true);
 
-
-$.ajax({
-	url: 'db.js',
-	dataType: "script"
-});
-
 // Cordova is ready
 //
 function onDeviceReady() {
@@ -49,7 +43,14 @@ function watchPosition() {
 	var options = { frequency: 1000 };
 	watchID = navigator.geolocation.watchPosition(posicion_ok, ErrorUbicacion, options);
 }
+
+
+
+
+
+
 function inicia_posicion(){
+	escribe_datos_guardados();
 	// Cambia de página
 	$.mobile.changePage("#pagina02");
 	$.mobile.loading( 'show', {
@@ -381,6 +382,20 @@ function confirma_si(){
 	url = url + 'numero=' + document.getElementById('direccion_numero').value + '&';
 	url = url + 'otro=' + document.getElementById('direccion_otro').value + '&';
 	url = url + 'comuna=' + document.getElementById('direccion_comuna').value + '&';
+	
+	// +++++++++++++++++++++++++++++++++++++
+	// Actualiza Campos en la base de datos
+	// +++++++++++++++++++++++++++++++++++++
+	actualiza_datos('cliente_nombre',$('#cliente_nombre').val());
+	actualiza_datos('cliente_telefono',$('#cliente_telefono').val());
+	actualiza_datos('direccion_calle',$('#direccion_calle').val());
+	actualiza_datos('direccion_numero',$('#direccion_numero').val());
+	actualiza_datos('direccion_otro',$('#direccion_otro').val());
+	actualiza_datos('direccion_comuna',$('#direccion_comuna').val());	
+	// +++++++++++++++++++++++++++++++++++++
+	// +++++++++++++++++++++++++++++++++++++
+	
+	
 	if(typeof(navigator.notification)=='undefined'){
 	}else{
 		url = url + 'device.name=' + device.name + '&';
