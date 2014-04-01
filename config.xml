@@ -7,7 +7,7 @@
   <name>Aloo Copete</name>
   <description>Esta aplicación es para hacer pedidos de licores en Santiago de Chile.</description>
   <author href="http://www.exefire.com" email="egallardo@exefire.com">Exequiel Gallardo</author>
-  <preference name="phonegap-version" value="3.1.0" />
+  <preference name="phonegap-version" value="3.3.0" />
   <preference name="orientation" value="portrait" />
   <preference name="prerendered-icon" value="true" />
   <preference name="target-device" value="handset" />
@@ -45,6 +45,7 @@
 			<param name="ios-package" value="CDVLocation" />
 	</feature>
 	
+	<preference name="BackgroundColor" value="0x000000ff"/>
 
   <access origin="*" />
 </widget>
