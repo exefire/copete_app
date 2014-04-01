@@ -304,8 +304,8 @@ function nuevo_producto(producto_temp_id,producto_temp_n){
 	}
 }
 
-$("#pagina05").live('pagebeforeshow', function() {
-	// Cuando aparece la pantalla de producto
+$(document).on("pagebeforeshow", "#pagina05", function () {
+   // Cuando aparece la pantalla de producto
 	url = url_master + "productos.json.php";
 	$.ajax({
 		url: url,
@@ -335,10 +335,11 @@ $("#pagina05").live('pagebeforeshow', function() {
 			$.mobile.changePage("#pagina04");
 			var texto = 'Error conectando con el servidor!';
 			msg(texto);
+			console.log(texto);
 		}
 	});
 });
-$("#nuevo_producto").live('pagebeforeshow', function() {
+$(document).on("pagebeforeshow", "#nuevo_producto", function () {
 	// Cuando aparece la pantalla de agregar nuevo producto al pedido
 	//$('#producto_nuevo_id').prop('selectedIndex',2);
 	//document.getElementById('producto_nuevo_n').value = '';
