@@ -3,7 +3,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.exefire.copete"
         versionCode="10"
-        version   = "1.1.0">
+        version   = "1.1">
   <name>Aloo Copete</name>
   <description>Esta aplicación es para hacer pedidos de licores en Santiago de Chile.</description>
   <author href="http://www.exefire.com" email="egallardo@exefire.com">Exequiel Gallardo</author>
@@ -23,7 +23,8 @@
   <icon src="icons/ios/icon-iphone-57.png" gap:platform="ios" width="57" height="57" />
   <icon src="icons/ios/icon-iphone-72.png" gap:platform="ios" width="72" height="72" />
   <icon src="icons/ios/icon-iphone-114.png" gap:platform="ios" width="114" height="114" />
-  <icon src="icons/ios/icon-iphone-114.png" gap:platform="ios" width="144" height="144" />
+  <icon src="icons/ios/icon-iphone-120.png" gap:platform="ios" width="120" height="120" />
+  <icon src="icons/ios/icon-iphone-144.png" gap:platform="ios" width="144" height="144" />
   <gap:splash src="splash/ios/Default.png" />
   <gap:splash src="splash/ios/Default.png" width="320" height="480" />
   <gap:splash src="splash/ios/Default_at_2x.png" width="640" height="960" />
