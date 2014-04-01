@@ -571,7 +571,7 @@ function solo_producto(id_prod){
 	$("#lista_cat").html('');
 	var contenido = '';
 	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a">Producto</div><div class="ui-block-b">Cantidad</div></div></li>');
-	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a">'+productos_nombre[id_prod]+'</div><div class="ui-block-b">'+cantidad_in+'</div></div></li>');
+	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a" style="word-break:break-all; white-space: normal;">'+productos_nombre[id_prod]+'</div><div class="ui-block-b">'+cantidad_in+'</div></div></li>');
 	contenido = contenido + ('<li><div class="ui-grid-a"><div class="ui-block-a">'+boton_cancelar+'</div><div class="ui-block-b">'+boton_aceptar+'</div></div></li>');
 	$('#lista_cat').append(contenido).trigger('create');
 	$("#lista_cat").listview('refresh');
