@@ -54,12 +54,25 @@ function watchPosition() {
 
 }
 
+function cargando(){
+	$.mobile.loading( "show", {
+		text: "Cargando...",
+		textVisible: true,
+		theme: "z",
+		html: ""
+	});
+}
+
+function cargando_ocultar(){
+	$.mobile.loading( "hide");
+}
+
 function comenzar(){
 	url = url_master + "horario.json.php";
 	$.ajax({
 		url: url,
-		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
-		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		beforeSend: function() { cargando(); }, //Show spinner
+		complete: function() { cargando_ocultar(); }, //Hide spinner
 		dataType: "jsonp",
 		async: true,
 		success: function (result) {
@@ -126,7 +139,7 @@ function posicion_ok(position){
 	if(zoom>17){// Si el zoom es mucho, lo deja en 17
 		map.setZoom(17);
 	}
-	$.mobile.hidePageLoadingMsg();
+	cargando_ocultar();
 }
 function onSuccess(position) {
 	document.getElementById('lat').value = position.coords.latitude;
@@ -178,8 +191,8 @@ function mostrar(){
 	
 	$.ajax({
 		url: url,
-		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
-		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		beforeSend: function() { cargando(); }, //Show spinner
+		complete: function() { cargando_ocultar(); }, //Hide spinner
 		dataType: "jsonp",
 		async: true,
 		success: function (result) {
@@ -296,8 +309,8 @@ $("#pagina05").live('pagebeforeshow', function() {
 	url = url_master + "productos.json.php";
 	$.ajax({
 		url: url,
-		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
-		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		beforeSend: function() { cargando(); }, //Show spinner
+		complete: function() { cargando_ocultar(); }, //Hide spinner
 		dataType: "jsonp",
 		async: true,
 		success: function (result) {
@@ -450,8 +463,8 @@ function confirma_si(){
 	
 	$.ajax({
 		url: url,
-		beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
-		complete: function() { $.mobile.hidePageLoadingMsg(); }, //Hide spinner
+		beforeSend: function() { cargando(); }, //Show spinner
+		complete: function() { cargando_ocultar(); }, //Hide spinner
 		dataType: "jsonp",
 		async: true,
 		success: function (result) {

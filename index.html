@@ -66,8 +66,8 @@ html, body {
   <div data-role="content">
     <h2>Relizar Pedido</h2>
     <p>Con esta aplicaci&oacute;n podr&aacute;s realizar el pedido de tu trago preferido en la comodidad de tu hogar, y disfrutarlo en aproximadamente 30 minutos.</p>
-    <p><!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="b">-->
-      <input type="button" onClick="comenzar()" value="Comenzar" data-theme="b">
+    <p><!--<input type="button" onClick="getCurrentPosition()" value="Comenzar" data-theme="a">-->
+      <input type="button" onClick="comenzar()" value="Comenzar" data-theme="a">
         </p>
     <h3 style="text-align:center;">No corras riesgos innecesarios, carretea seguro!</h3>
   </div>
@@ -93,11 +93,11 @@ html, body {
   </div>
   <!-- /header -->
   <div data-role="content"> 
-    <!--<input type="button" onClick="iniciar_timer_map()" value="Contar" data-theme="b">-->
+    <!--<input type="button" onClick="iniciar_timer_map()" value="Contar" data-theme="a">-->
     <h2>Tu Ubicaci&oacute;n</h2>
     <div id="map-canvas" style="border:#666 solid 1px;"></div>
     <div>
-      <input type="button" onClick="mostrar()" value="Siguiente" data-theme="b">
+      <input type="button" onClick="mostrar()" value="Siguiente" data-theme="a">
     </div>
     <input type="hidden" name="lat" id="lat">
     <input type="hidden" name="lon" id="lon">
@@ -121,7 +121,7 @@ html, body {
       <label for="cliente_telefono">Tel&eacute;fono:</label>
       <input type="number" name="cliente_telefono" id="cliente_telefono" pattern="[0-9]*" value="" />
     </div>
-    <input type="button" onClick="paso_datos()" value="Siguiente" data-theme="b">
+    <input type="button" onClick="paso_datos()" value="Siguiente" data-theme="a">
   </div>
   <!-- /content --> 
 </div>
@@ -155,7 +155,7 @@ html, body {
       <label for="cliente_nombre">Comuna:</label>
       <input type="text" name="direccion_comuna" id="direccion_comuna" value="" />
     </div>
-    <input type="button" onClick="paso_direccion()" value="Siguiente" data-theme="b">
+    <input type="button" onClick="paso_direccion()" value="Siguiente" data-theme="a">
   </div>
   <!-- /content --> 
 </div>
@@ -193,10 +193,10 @@ html, body {
     </div>
     <hr>
     <div class="ui-grid-a">
-      <div class="ui-block-a"><a href="#nuevo_producto" data-rel="dialog" data-role="button" data-theme="b">+ Producto</a></div>
+      <div class="ui-block-a"><a href="#nuevo_producto" data-rel="dialog" data-role="button" data-theme="a">+ Producto</a></div>
       <div class="ui-block-b">&nbsp;</div>
     </div>
-    <input type="button" onClick="ultimo_paso()" value="Siguiente" data-theme="b">
+    <input type="button" onClick="ultimo_paso()" value="Siguiente" data-theme="a">
   </div>
   <!-- /content --> 
 </div>
@@ -226,7 +226,7 @@ html, body {
   <div data-role="content">
     <h2>Titulo 10</h2>
     
-    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="a">
   </div>
   <!-- /content -->
 </div>
@@ -281,7 +281,7 @@ html, body {
         <div id="valor_total_conf"></div>
       </div>
     </div>
-    <input type="button" onClick="confirmar()" value="Confirmar" data-theme="b">
+    <input type="button" onClick="confirmar()" value="Confirmar" data-theme="a">
   </div>
   <!-- /content --> 
 </div>
@@ -349,7 +349,7 @@ html, body {
   <!-- /header -->
   <div data-role="content">
     <h2>Titulo9</h2>
-    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="b">
+    <input type="button" onClick="window.location='#pagina04';" value="Siguiente" data-theme="a">
   </div>
   <!-- /content -->
   <div data-role="footer" data-position="fixed"> 
